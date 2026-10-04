@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NaviGo — Explore More. Plan Smarter.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <div class="splash-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor"/>
+      </svg>
+    </div>
+    <h1>Navi<span>Go</span></h1>
+    <p>EXPLORE MORE. PLAN SMARTER.</p>
+    <div class="splash-loader"></div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a href="#" class="logo" onclick="showPage('home'); return false;">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor"/>
+        </svg>
+      </div>
+      <span>Navi<span>Go</span></span>
+    </a>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#" class="nav-link active" data-page="home" onclick="showPage('home'); closeMobileMenu(); return false;">Home</a></li>
+        <li><a href="#" class="nav-link" data-page="explore" onclick="showPage('explore'); closeMobileMenu(); return false;">Explore</a></li>
+        <li><a href="#" class="nav-link" data-page="plan" onclick="showPage('plan'); closeMobileMenu(); return false;">Plan Trip</a></li>
+        <li><a href="#" class="nav-link" data-page="assistant" onclick="showPage('assistant'); closeMobileMenu(); return false;">AI Assistant</a></li>
+        <li><a href="#" class="nav-link" data-page="history" onclick="showPage('history'); closeMobileMenu(); return false;">History</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn-primary" onclick="showPage('plan')">Get Started</button>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- Alerts Drawer -->
+<div class="alert-drawer" id="alertDrawer">
+  <div class="alert-drawer-header">
+    <span>⚠️ Live Travel Alerts</span>
+    <button onclick="toggleAlertsDrawer()" style="font-weight:bold;font-size:16px;">✕</button>
+  </div>
+  <div class="alert-drawer-body" id="alertDrawerList">
+    <div style="color:var(--muted);font-size:13px;padding:12px;text-align:center;">No critical alerts right now. Roads are open.</div>
+  </div>
+</div>
+
+
+<!-- HOME -->
+<section id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2000&q=80" alt="Mountains">
+    </div>
+    <div class="container hero-content">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Explore Pakistan with NaviGo
+      </div>
+      <h1>Explore More.<br><span class="accent">Plan Smarter.</span></h1>
+      <p>Discover Pakistan, create personalized trips, and explore destinations with NaviGo.</p>
+    </div>
+  </div>
+
+  <div class="search-card-wrap">
+    <div class="search-card">
+      <h3>🗺️ Where are you going?</h3>
+      <div class="search-fields">
+        <div class="field">
+          <label>Destination</label>
+          <select id="homeDest">
+            <optgroup label="🏔️ North">
+              <option value="naran">Naran</option>
+              <option value="hunza">Hunza</option>
+              <option value="skardu">Skardu</option>
+              <option value="swat">Swat</option>
+              <option value="murree">Murree</option>
+              <option value="kashmir">Kashmir</option>
+              <option value="gilgit">Gilgit</option>
+              <option value="fairy">Fairy Meadows</option>
+            </optgroup>
+            <optgroup label="🏙️ Cities">
+              <option value="lahore">Lahore</option>
+              <option value="islamabad">Islamabad</option>
+              <option value="karachi">Karachi</option>
+              <option value="peshawar">Peshawar</option>
+              <option value="quetta">Quetta</option>
+              <option value="multan">Multan</option>
+            </optgroup>
+            <optgroup label="🌊 Coastal">
+              <option value="gwadar">Gwadar</option>
+              <option value="ormara">Ormara</option>
+            </optgroup>
+            <optgroup label="🏜️ Heritage">
+              <option value="mohenjo-daro">Mohenjo-daro</option>
+              <option value="taxila">Taxila</option>
+              <option value="makli">Makli</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="field">
+          <label>Duration</label>
+          <select id="homeDuration">
+            <option value="1">1 Day</option>
+            <option value="3" selected>3 Days</option>
+            <option value="5">5 Days</option>
+            <option value="7">7 Days</option>
+            <option value="10">10 Days</option>
+            <option value="14">14 Days</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Travelers</label>
+          <select id="homeTravelers">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4" selected>4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="8">8</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Budget (PKR)</label>
+          <select id="homeBudget">
+            <option value="15000">Rs. 15,000</option>
+            <option value="25000">Rs. 25,000</option>
+            <option value="35000" selected>Rs. 35,000</option>
+            <option value="50000">Rs. 50,000</option>
+            <option value="75000">Rs. 75,000</option>
+            <option value="100000">Rs. 100,000</option>
+          </select>
+        </div>
+      </div>
+        <div class="field">
+          <label>Duration</label>
+          <select>
+            <option>1 Day</option>
+            <option selected>3 Days</option>
+            <option>5 Days</option>
+            <option>7 Days</option>
+            <option>10 Days</option>
+            <option>14 Days</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Travelers</label>
+          <select>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option selected>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>8</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Budget</label>
+          <select>
+            <option>Rs. 15,000</option>
+            <option>Rs. 25,000</option>
+            <option selected>Rs. 35,000</option>
+            <option>Rs. 50,000</option>
+            <option>Rs. 75,000</option>
+            <option>Rs. 100,000</option>
+          </select>
+        </div>
+      </div>
+      <div class="search-card-footer">
+        <button class="btn-primary" onclick="applyHomeSearchToPlan()">✨ Create AI Trip</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Explore Pakistan</h2>
+          <p>Discover places worth visiting.</p>
+        </div>
+        <a href="#" class="link-arrow" onclick="showPage('explore'); return false;">View all →</a>
+      </div>
+
+      <div class="dest-grid">
+        <div class="dest-card" onclick="showDestination('naran')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="Naran">
+            <span class="dest-tag">Nature • Adventure</span>
+            <span class="dest-price">From Rs. 12,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Naran</h3>
+              <p>Alpine valley with lakes, rivers, and the Babusar Top gateway.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('hunza')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=800&q=80" alt="Hunza">
+            <span class="dest-tag">Mountains • Culture</span>
+            <span class="dest-price">From Rs. 22,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Hunza</h3>
+              <p>Land of forts, apricot blossoms, and dramatic mountain peaks.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('skardu')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=800&q=80" alt="Skardu">
+            <span class="dest-tag">Adventure • Landscapes</span>
+            <span class="dest-price">From Rs. 25,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Skardu</h3>
+              <p>Gateway to the Karakoram — lakes, deserts, and glaciers.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('kashmir')">
+          <div class="dest-img">
+            <img onerror="kashFallback(this)" src="https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=800&q=80" alt="Kashmir">
+            <span class="dest-tag">Lakes • Paradise</span>
+            <span class="dest-price">From Rs. 18,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Kashmir</h3>
+              <p>Heaven on earth — Dal Lake, houseboats, and lush valleys.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('gilgit')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80" alt="Gilgit">
+            <span class="dest-tag">Valleys • Rivers</span>
+            <span class="dest-price">From Rs. 20,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Gilgit</h3>
+              <p>Gateway to the northern valleys, rivers, and rugged peaks.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('fairy')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="Fairy Meadows">
+            <span class="dest-tag">Meadows • Nanga Parbat</span>
+            <span class="dest-price">From Rs. 8,500</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Fairy Meadows</h3>
+              <p>Green pastures at the foot of Nanga Parbat — cheapest escape.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('swat')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=800&q=80" alt="Swat">
+            <span class="dest-tag">Nature • Relaxation</span>
+            <span class="dest-price">From Rs. 10,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Swat</h3>
+              <p>The Switzerland of Pakistan — rivers, meadows, pine forests.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('murree')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80" alt="Murree">
+            <span class="dest-tag">Hills • Weekend</span>
+            <span class="dest-price">From Rs. 6,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Murree</h3>
+              <p>Classic hill station — pine trees, cool air, and Mall Road.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('lahore')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1597040663342-45b6af3d91a5?auto=format&fit=crop&w=800&q=80" alt="Lahore">
+            <span class="dest-tag">Heritage • Food • Culture</span>
+            <span class="dest-price">From Rs. 5,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Lahore</h3>
+              <p>The cultural capital — Badshahi Mosque, Lahore Fort, and legendary food street.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('karachi')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1567168544813-cc03465b4fa8?auto=format&fit=crop&w=800&q=80" alt="Karachi">
+            <span class="dest-tag">Coastal • Urban • Seafood</span>
+            <span class="dest-price">From Rs. 4,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Karachi</h3>
+              <p>City of lights — Clifton Beach, Quaid's Mausoleum, and vibrant street food scene.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('islamabad')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=800&q=80" alt="Islamabad">
+            <span class="dest-tag">Capital • Nature • Modern</span>
+            <span class="dest-price">From Rs. 6,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Islamabad</h3>
+              <p>Pakistan's green capital — Faisal Mosque, Margalla Hills, and pristine parks.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('gwadar')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=800&q=80" alt="Gwadar">
+            <span class="dest-tag">Coastal • CPEC • Fishing</span>
+            <span class="dest-price">From Rs. 8,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Gwadar</h3>
+              <p>Arabia Sea jewel — golden beaches, deep-sea fishing, and Pakistan's future port city.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="featured">
+        <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=2000&q=80" alt="Hunza">
+        <div class="featured-overlay"></div>
+        <div class="featured-content">
+          <div class="eyebrow">Featured</div>
+          <h2>Discover Hunza</h2>
+          <div class="featured-meta">
+            <span>🏔️ Mountain destination</span>
+            <span>🌤️ Great for nature</span>
+            <span>📍 Gilgit-Baltistan</span>
+          </div>
+          <button class="btn-primary" onclick="showDestination('hunza')">Explore Destination →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="center-head">
+        <h2 style="font-size:clamp(28px,4vw,40px);font-weight:900;letter-spacing:-0.025em;">How NaviGo works</h2>
+        <p style="color:var(--muted);margin-top:14px;font-size:15px;">Three simple steps to your next adventure.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-top">
+            <span class="step-num">01</span>
+            <span class="step-icon">🧭</span>
+          </div>
+          <h3>Choose</h3>
+          <p>Select your destination and preferences.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-top">
+            <span class="step-num">02</span>
+            <span class="step-icon">✨</span>
+          </div>
+          <h3>Plan</h3>
+          <p>NaviGo creates a personalized trip plan.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-top">
+            <span class="step-num">03</span>
+            <span class="step-icon">📍</span>
+          </div>
+          <h3>Explore</h3>
+          <p>Discover places and travel information.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- EXPLORE -->
+<section id="page-explore" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
+    <div class="page-head">
+      <h1>Explore Pakistan</h1>
+      <p>Search destinations, hotels, restaurants, and more.</p>
+    </div>
+
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Search destinations or places..." oninput="filterPlaces()">
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+<div class="chips-row" id="categoryChips" style="margin-bottom:0;">
+      <button class="chip active" data-cat="all" onclick="setCategory(this)">🗺️ All</button>
+      <button class="chip" data-cat="attraction" onclick="setCategory(this)">🏔️ Attractions</button>
+      <button class="chip" data-cat="hotel" onclick="setCategory(this)">🏨 Hotels</button>
+      <button class="chip" data-cat="restaurant" onclick="setCategory(this)">🍽️ Restaurants</button>
+      <button class="chip" data-cat="fuel" onclick="setCategory(this)">⛽ Fuel</button>
+      <button class="chip" data-cat="hospital" onclick="setCategory(this)">🏥 Emergency</button>
+    </div>
+    <button class="btn-secondary" style="border-radius:999px;padding:8px 16px;font-size:13px;display:inline-flex;align-items:center;gap:6px;" onclick="locateUserAroundMe()">
+      📍 <strong>What's Around Me?</strong>
+    </button>
+    </div>
+
+    <div class="explore-grid">
+      <div class="map-area" id="mapArea">
+        <svg class="map-roads" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M 5 45 Q 30 35 50 55 T 95 60" stroke="#94A3B8" stroke-width="0.9" fill="none" stroke-dasharray="3 2" opacity="0.65"/>
+          <path d="M 20 90 Q 40 60 60 40 T 90 15" stroke="#94A3B8" stroke-width="0.7" fill="none" stroke-dasharray="2 2" opacity="0.5"/>
+          <path d="M 0 70 Q 30 75 55 70 T 100 85" stroke="#94A3B8" stroke-width="0.6" fill="none" stroke-dasharray="2 3" opacity="0.45"/>
+        </svg>
+        <svg class="map-river" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M 0 25 Q 25 35 45 50 T 100 70" fill="none" stroke="#7DD3FC" stroke-width="1.1" opacity="0.55"/>
+          <path d="M 10 100 Q 30 75 55 62 T 100 50" fill="none" stroke="#7DD3FC" stroke-width="0.7" opacity="0.4"/>
+        </svg>
+
+        <div class="map-legend">
+          <span><span class="dot" style="background:#13B8A6"></span> Attraction</span>
+          <span><span class="dot" style="background:#4DA3FF"></span> Hotel</span>
+          <span><span class="dot" style="background:#F59E0B"></span> Restaurant</span>
+          <span><span class="dot" style="background:#0B1F33"></span> Fuel</span>
+          <span><span class="dot" style="background:#EF4444"></span> Hospital</span>
+        </div>
+
+        <div class="map-zoom">
+          <button onclick="toast('Zoom +')">+</button>
+          <button onclick="toast('Zoom −')">−</button>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-weight:800;margin-bottom:16px;font-size:16px;">Nearby Places</h3>
+        <div class="places-list" id="placesList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLAN TRIP -->
+<section id="page-plan" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
+    <div id="planForm">
+      <div class="page-head">
+        <h1>Plan Your Journey</h1>
+        <p>Any destination across Pakistan — NaviGo creates your perfect itinerary.</p>
+      </div>
+
+      <div class="plan-form">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);">
+          <span style="font-weight:800;font-size:15px;">✨ Smart Itinerary Preferences</span>
+          <button class="mic-btn" id="planMicBtn" onclick="toggleVoicePlanInput()" title="Speak in Urdu or English (e.g. 'Mujhe Lahore se 3 din ke liye Naran jana hai')">🎤</button>
+        </div>
+        <div id="voiceStatusMsg" style="display:none;margin-bottom:16px;padding:10px 14px;background:rgba(19,184,166,0.1);border-radius:12px;font-size:13px;color:var(--teal);font-weight:600;"></div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Origin City</label>
+            <input type="text" id="planOrigin" placeholder="e.g. Islamabad, Lahore, Karachi" value="Islamabad">
+          </div>
+          <div class="form-field">
+            <label>Destination</label>
+            <select id="planDest">
+              <optgroup label="🏔️ North Pakistan">
+                <option value="naran">Naran</option>
+                <option value="hunza">Hunza</option>
+                <option value="skardu">Skardu</option>
+                <option value="swat">Swat</option>
+                <option value="murree">Murree</option>
+                <option value="kashmir">Kashmir</option>
+                <option value="gilgit">Gilgit</option>
+                <option value="fairy">Fairy Meadows</option>
+              </optgroup>
+              <optgroup label="🏙️ Major Cities">
+                <option value="lahore">Lahore</option>
+                <option value="islamabad">Islamabad</option>
+                <option value="karachi">Karachi</option>
+                <option value="peshawar">Peshawar</option>
+                <option value="quetta">Quetta</option>
+                <option value="multan">Multan</option>
+                <option value="faisalabad">Faisalabad</option>
+              </optgroup>
+              <optgroup label="🌊 Coastal">
+                <option value="gwadar">Gwadar</option>
+                <option value="ormara">Ormara</option>
+              </optgroup>
+              <optgroup label="🏛️ Heritage Sites">
+                <option value="mohenjo-daro">Mohenjo-daro</option>
+                <option value="taxila">Taxila</option>
+                <option value="makli">Makli</option>
+                <option value="lahore-fort">Lahore Fort Area</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Duration</label>
+            <select id="planDuration">
+              <option value="1">1 Day</option>
+              <option value="3" selected>3 Days</option>
+              <option value="5">5 Days</option>
+              <option value="7">7 Days</option>
+              <option value="10">10 Days</option>
+              <option value="14">14 Days</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Travelers</label>
+            <select id="planTravelers">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4" selected>4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="8">8</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Budget (PKR)</label>
+            <input type="number" id="planBudget" placeholder="35000" value="35000" min="5000" step="5000">
+          </div>
+          <div class="form-field">
+            <label>Transport Mode</label>
+            <select id="planTransport">
+              <option value="car">Car (Self-Drive / Taxi)</option>
+              <option value="van">HiAce / Coaster Van</option>
+              <option value="bus">Public Bus (Daewoo / Faisal)</option>
+              <option value="bike">Motorbike</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-full">
+          <label style="font-size:14px;font-weight:700;display:block;margin-bottom:10px;color:var(--ink);">Interests</label>
+          <div class="chips-row" id="interestChips" style="margin-bottom:0;">
+            <button type="button" class="chip active" data-interest="nature" onclick="this.classList.toggle('active')">🌲 Nature</button>
+            <button type="button" class="chip active" data-interest="adventure" onclick="this.classList.toggle('active')">🧗 Adventure</button>
+            <button type="button" class="chip" data-interest="food" onclick="this.classList.toggle('active')">🍽️ Food</button>
+            <button type="button" class="chip" data-interest="photography" onclick="this.classList.toggle('active')">📷 Photography</button>
+            <button type="button" class="chip" data-interest="culture" onclick="this.classList.toggle('active')">🏛️ Culture</button>
+            <button type="button" class="chip" data-interest="relaxation" onclick="this.classList.toggle('active')">😌 Relaxation</button>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="width:100%;padding:16px;justify-content:center;font-size:15px;margin-top:16px;" onclick="generateTrip()">
+          ✨ Generate My Trip
+        </button>
+      </div>
+    </div>
+
+    <div id="planLoading" class="hidden">
+      <div class="loading-view">
+        <div class="loading-icon">✨</div>
+        <h2>NaviGo is planning your trip...</h2>
+        <div class="loading-steps" id="loadingSteps">
+          <div class="loading-step" data-step="0"><span class="step-check">1</span> Understanding your preferences</div>
+          <div class="loading-step" data-step="1"><span class="step-check">2</span> Selecting destinations</div>
+          <div class="loading-step" data-step="2"><span class="step-check">3</span> Creating itinerary</div>
+          <div class="loading-step" data-step="3"><span class="step-check">4</span> Preparing your plan</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="planResult" class="hidden">
+      <button class="btn-secondary" style="margin-bottom:20px;" onclick="backToForm()">← Back to form</button>
+      <div class="result-head">
+        <h1>Your Naran Adventure</h1>
+        <p id="resultMeta">3 Days • 4 Travelers</p>
+      </div>
+
+      <div class="result-grid">
+        <div class="timeline-col">
+          <div class="day-card">
+            <span class="day-badge">DAY 01</span>
+            <div class="timeline">
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Naran Bazaar</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Saif-ul-Malook</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Local Restaurant</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Hotel</div>
+            </div>
+          </div>
+
+          <div class="day-card">
+            <span class="day-badge">DAY 02</span>
+            <div class="timeline">
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Lulusar Lake</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Babusar Top</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Photography</div>
+            </div>
+          </div>
+
+          <div class="day-card">
+            <span class="day-badge">DAY 03</span>
+            <div class="timeline">
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Nearby Attractions</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Shopping</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Return</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="budget-card">
+            <h3>Estimated Budget</h3>
+            <div class="budget-row"><span>Transport</span><strong>Rs. 10,500</strong></div>
+            <div class="budget-row"><span>Hotel</span><strong>Rs. 8,500</strong></div>
+            <div class="budget-row"><span>Food</span><strong>Rs. 6,500</strong></div>
+            <div class="budget-row"><span>Activities</span><strong>Rs. 4,000</strong></div>
+            <div class="budget-total"><span>Total</span><span>Rs. 29,500</span></div>
+            <div class="budget-badge">🟢 Within Budget</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI ASSISTANT -->
+<section id="page-assistant" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
+    <div class="page-head">
+      <h1>NaviGo AI</h1>
+      <p>Your AI travel companion for all of Pakistan — ask in English, Urdu, or Roman Urdu.</p>
+    </div>
+
+    <div class="chat-wrap">
+      <div class="chat-card">
+        <div class="chat-messages" id="chatMessages">
+          <div class="msg user">
+            <div class="msg-bubble">What can I visit in Naran tomorrow?</div>
+          </div>
+          <div class="msg ai">
+            <div class="msg-bubble">
+              Here are some suitable places based on your trip:
+              <div class="msg-cards">
+                <div class="msg-card"><div class="emoji">🏔️</div><strong>Saif-ul-Malook</strong><small>Popular in Naran</small></div>
+                <div class="msg-card"><div class="emoji">🏔️</div><strong>Lulusar Lake</strong><small>Scenic lake</small></div>
+                <div class="msg-card"><div class="emoji">🏔️</div><strong>Babusar Top</strong><small>Panoramic views</small></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-row">
+          <button class="quick-btn" onclick="askAI('Best places')">💎 Best places</button>
+          <button class="quick-btn" onclick="askAI('Budget options')">💰 Budget options</button>
+          <button class="quick-btn" onclick="askAI('Tomorrow plan')">📅 Tomorrow's plan</button>
+          <button class="quick-btn" onclick="askAI('Weather')">🌤️ Weather</button>
+        </div>
+
+        <div class="chat-input-row">
+          <button class="mic-btn" id="chatMicBtn" onclick="toggleVoiceChat()" title="Voice input (Urdu / English)">🎤</button>
+          <input id="chatInput" class="chat-input" type="text" placeholder="Ask about any destination in Pakistan..." onkeydown="if(event.key==='Enter') sendMessage()">
+          <button class="btn-primary" style="padding: 14px 20px;" onclick="sendMessage()">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section id="page-history" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px; max-width: 1000px;">
+    <div class="page-head">
+      <h1>Your Travel History</h1>
+      <p>Past trips, saved itineraries, and upcoming adventures.</p>
+    </div>
+
+    <div class="history-grid">
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <button class="delete-trip-btn" onclick="event.stopPropagation(); this.closest('.history-card').remove(); toast('Trip removed');" title="Delete this trip" aria-label="Delete trip">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+        </button>
+        <div class="history-img">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80" alt="Naran">
+        </div>
+        <div class="history-body">
+          <h3>Naran Adventure</h3>
+          <div class="meta"><span>📅 3 Days</span><span>👥 4 Travelers</span></div>
+          <span class="history-status completed">✓ Completed</span>
+        </div>
+      </div>
+
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <button class="delete-trip-btn" onclick="event.stopPropagation(); this.closest('.history-card').remove(); toast('Trip removed');" title="Delete this trip" aria-label="Delete trip">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+        </button>
+        <div class="history-img">
+          <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=400&q=80" alt="Hunza">
+        </div>
+        <div class="history-body">
+          <h3>Hunza Explorer</h3>
+          <div class="meta"><span>📅 5 Days</span><span>👥 2 Travelers</span></div>
+          <span class="history-status completed">✓ Completed</span>
+        </div>
+      </div>
+
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <button class="delete-trip-btn" onclick="event.stopPropagation(); this.closest('.history-card').remove(); toast('Trip removed');" title="Delete this trip" aria-label="Delete trip">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+        </button>
+        <div class="history-img">
+          <img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=400&q=80" alt="Skardu">
+        </div>
+        <div class="history-body">
+          <h3>Skardu Expedition</h3>
+          <div class="meta"><span>📅 7 Days</span><span>👥 6 Travelers</span></div>
+          <span class="history-status upcoming">⏱ Upcoming</span>
+        </div>
+      </div>
+
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <button class="delete-trip-btn" onclick="event.stopPropagation(); this.closest('.history-card').remove(); toast('Trip removed');" title="Delete this trip" aria-label="Delete trip">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+        </button>
+        <div class="history-img">
+          <img onerror="kashFallback(this)" src="https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=400&q=80" alt="Kashmir">
+        </div>
+        <div class="history-body">
+          <h3>Kashmir Dreams</h3>
+          <div class="meta"><span>📅 10 Days</span><span>👥 4 Travelers</span></div>
+          <span class="history-status draft">✎ Draft</span>
+        </div>
+      </div>
+
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <button class="delete-trip-btn" onclick="event.stopPropagation(); this.closest('.history-card').remove(); toast('Trip removed');" title="Delete this trip" aria-label="Delete trip">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+        </button>
+        <div class="history-img">
+          <img src="https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=400&q=80" alt="Swat">
+        </div>
+        <div class="history-body">
+          <h3>Weekend in Swat</h3>
+          <div class="meta"><span>📅 2 Days</span><span>👥 3 Travelers</span></div>
+          <span class="history-status completed">✓ Completed</span>
+        </div>
+      </div>
+
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <button class="delete-trip-btn" onclick="event.stopPropagation(); this.closest('.history-card').remove(); toast('Trip removed');" title="Delete this trip" aria-label="Delete trip">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+        </button>
+        <div class="history-img">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80" alt="Fairy Meadows">
+        </div>
+        <div class="history-body">
+          <h3>Fairy Meadows Camp</h3>
+          <div class="meta"><span>📅 14 Days</span><span>👥 5 Travelers</span></div>
+          <span class="history-status draft">✎ Draft</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" style="margin-top:40px;">
+      <div class="empty-icon">✈️</div>
+      <h3>Ready for your next adventure?</h3>
+      <p>Start planning a new trip with NaviGo.</p>
+      <button class="btn-primary" onclick="showPage('plan')">Plan a New Trip</button>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO ANALYZER -->
+<section id="page-analyzer" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px; max-width: 900px;">
+    <div class="page-head" style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;">
+      <div>
+        <h1>Analyze a Road Photo</h1>
+        <p>Upload a road image and NaviGo will identify possible visible issues.</p>
+      </div>
+      <button class="btn-secondary" style="border-radius:12px;padding:10px 16px;font-size:13px;display:inline-flex;align-items:center;gap:6px;" onclick="triggerIdentifyPlace()">
+        📷 <strong>Identify This Place</strong>
+      </button>
+    </div>
+
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('photoInput').click()">
+      <div class="icon">📸</div>
+      <h3>Upload Road Photo</h3>
+      <p>Click or drag & drop (JPG, PNG)</p>
+      <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhoto(event)">
+    </div>
+
+    <div id="photoPreviewWrap" class="hidden" style="margin-top:20px;">
+      <img id="photoPreview" class="preview-img" alt="preview">
+      <div style="display:flex;gap:12px;">
+        <button class="btn-primary" onclick="analyzePhoto()">Analyze Photo</button>
+        <button class="btn-secondary" onclick="resetPhoto()">Reset</button>
+      </div>
+    </div>
+
+    <div id="analysisResult" class="hidden">
+      <div class="analysis-card">
+        <div class="warn">⚠️ Possible Issue Detected</div>
+        <h3>Road Obstruction</h3>
+        <p>Possible mud and standing water detected.</p>
+        <p style="margin-top:14px;">📍 Naran Road</p>
+        <button class="btn-primary" style="margin-top:20px;" onclick="toast('Report submitted — thank you!')">Submit Report</button>
+      </div>
+    </div>
+
+    <h2 style="font-weight:800;font-size:22px;margin-top:52px;margin-bottom:8px;">Community Road Reports</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:8px;">Live updates from travelers on the road.</p>
+    <div class="reports-grid">
+      <div class="report-card">
+        <div class="report-status"><span class="status-dot caution"></span> Caution</div>
+        <h4>Possible Road Obstruction</h4>
+        <p>📍 Naran Road</p>
+        <p style="margin-top:6px;">Reported recently</p>
+      </div>
+      <div class="report-card">
+        <div class="report-status"><span class="status-dot caution"></span> Caution</div>
+        <h4>Heavy Rain</h4>
+        <p>📍 Kaghan Road</p>
+        <p style="margin-top:6px;">Reported 25 min ago</p>
+      </div>
+      <div class="report-card">
+        <div class="report-status"><span class="status-dot open"></span> Open</div>
+        <h4>Road Clear</h4>
+        <p>📍 Babusar Top</p>
+        <p style="margin-top:6px;">Reported 1 hour ago</p>
+      </div>
+      <div class="report-card">
+        <div class="report-status"><span class="status-dot closed"></span> Closed</div>
+        <h4>Landslide</h4>
+        <p>📍 Jalkhad</p>
+        <p style="margin-top:6px;">Reported 2 hours ago</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATION -->
+<section id="page-destination" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
+    <div class="dest-hero" id="destHero">
+      <img id="destHeroImg" src="" alt="">
+      <div class="dest-hero-content">
+        <div class="popular-badge">⭐ Popular</div>
+        <h1 id="destHeroTitle">Naran</h1>
+        <p id="destHeroSub"></p>
+      </div>
+    </div>
+
+    <div class="dest-detail-grid">
+      <div>
+        <div class="detail-card">
+          <h2 id="destAboutTitle">About Naran</h2>
+          <p id="destAbout"></p>
+          <div class="meta-chips">
+            <span class="meta-chip" id="destTemp">🌡️ 18°C</span>
+            <span class="meta-chip" id="destCond">☁️ Partly Cloudy</span>
+            <span class="meta-chip green" id="destRoad">🟢 Road Open</span>
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <h2>Popular Places</h2>
+          <div class="popular-places" id="destPlaces"></div>
+        </div>
+
+        <div class="detail-card">
+          <h2>Nearby</h2>
+          <div class="popular-places">
+            <div class="place-box"><div class="emoji">🏨</div><strong>Hotels</strong></div>
+            <div class="place-box"><div class="emoji">🍽️</div><strong>Restaurants</strong></div>
+            <div class="place-box"><div class="emoji">⛽</div><strong>Fuel</strong></div>
+            <div class="place-box"><div class="emoji">🏥</div><strong>Hospitals</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="weather-card">
+          <div class="weather-top">
+            <div>
+              <small style="color:var(--muted);font-size:12px;font-weight:600;">Today</small>
+              <div class="weather-temp" id="wTemp">18°C</div>
+              <p style="color:var(--muted);font-size:14px;font-weight:500;" id="wCond">Partly Cloudy</p>
+            </div>
+            <div class="weather-icon">☁️</div>
+          </div>
+          <div class="weather-hl">
+            <div><small>High</small><strong id="wHigh">21°C</strong></div>
+            <div><small>Low</small><strong id="wLow">14°C</strong></div>
+          </div>
+        </div>
+
+        <div class="road-card">
+          <h3 style="font-size:17px;font-weight:800;margin-bottom:16px;">Travel Conditions</h3>
+          <div class="road-row">
+            <span class="status-dot open"></span>
+            <span>Road Open</span>
+          </div>
+          <div class="road-row">🚦 Moderate Traffic</div>
+          <div class="road-updated">Updated 10 minutes ago</div>
+        </div>
+
+        <button class="btn-primary" style="width:100%;justify-content:center;padding:15px;" onclick="showPage('plan')">✨ Plan My Trip</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section id="page-profile" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px; max-width: 900px;">
+    <div class="profile-head">
+      <div class="avatar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:34px;height:34px;color:white;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <div>
+        <h1>My Profile</h1>
+        <p>Manage your saved trips and account settings</p>
+      </div>
+    </div>
+
+    <div class="profile-menu">
+      <div class="menu-card" onclick="showPage('history')"><span>🧳 Travel History</span><span class="arrow">→</span></div>
+      <div class="menu-card" onclick="showSavedDestinations()"><span>⭐ Saved Destinations</span><span class="arrow">→</span></div>
+      <div class="menu-card" onclick="showMyReports()"><span>📝 My Reports</span><span class="arrow">→</span></div>
+      <div class="menu-card" onclick="showSettingsModal()"><span>⚙️ Settings</span><span class="arrow">→</span></div>
+    </div>
+
+    <div class="empty-state">
+      <div class="empty-icon">✨</div>
+      <h3>No Saved Trips</h3>
+      <p>Your next adventure is waiting.</p>
+      <button class="btn-primary" onclick="showPage('plan')">Plan a Trip</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor"/>
+            </svg>
+          </div>
+          <span>Navi<span>Go</span></span>
+        </div>
+        <p>Explore More. Plan Smarter. Your smart travel companion for Pakistan.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('home'); return false;">Home</a></li>
+          <li><a href="#" onclick="showPage('explore'); return false;">Explore</a></li>
+          <li><a href="#" onclick="showPage('plan'); return false;">Plan Trip</a></li>
+          <li><a href="#" onclick="showPage('assistant'); return false;">AI Assistant</a></li>
+          <li><a href="#" onclick="showPage('history'); return false;">History</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 NaviGo. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- Mobile bottom nav -->
+<nav class="mobile-bottom-nav">
+  <a href="#" class="active" data-page="home" onclick="showPage('home'); return false;"><span class="nav-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg></span><span class="nav-label">Home</span></a>
+  <a href="#" data-page="explore" onclick="showPage('explore'); return false;"><span class="nav-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><span class="nav-label">Explore</span></a>
+  <a href="#" data-page="plan" onclick="showPage('plan'); return false;"><span class="nav-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16v4M17 18h4"/></svg></span><span class="nav-label">Plan</span></a>
+  <a href="#" data-page="assistant" onclick="showPage('assistant'); return false;"><span class="nav-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg></span><span class="nav-label">AI</span></a>
+  <a href="#" data-page="history" onclick="showPage('history'); return false;"><span class="nav-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg></span><span class="nav-label">History</span></a>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.1/marked.min.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/state.js"></script>
+<script src="/js/destinations.js"></script>
+<script src="/js/map.js"></script>
+<script src="/js/plan.js"></script>
+<script src="/js/chat.js"></script>
+<script src="/js/analyzer.js"></script>
+<script src="/js/voice.js"></script>
+<script src="/js/app.js"></script>
+
+
+</body>
+</html>
