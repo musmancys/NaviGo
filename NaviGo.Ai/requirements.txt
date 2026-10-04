@@ -1,0 +1,34 @@
+# Core Web Framework
+fastapi>=0.110.0,<0.120.0
+uvicorn[standard]>=0.28.0,<0.35.0
+pydantic>=2.6.0,<3.0.0
+pydantic-settings>=2.2.0,<3.0.0
+python-multipart>=0.0.9
+
+# HTTP & Async Utilities
+httpx>=0.27.0,<0.29.0
+aiofiles>=23.2.1
+
+# Database & Cloud Services
+supabase>=2.3.0,<2.15.0
+sqlite3-to-mysql>=2.1.0; sys_platform == 'never' # placeholder, standard sqlite3 is builtin
+
+# Image Processing & PDF Generation
+Pillow>=10.2.0,<11.5.0
+reportlab>=4.1.0,<4.5.0
+
+# Rate Limiting & Security
+slowapi>=0.1.9
+pyjwt>=2.8.0,<3.0.0
+cryptography>=42.0.0,<45.0.0
+
+# Push Notifications
+pywebpush>=1.14.0
+
+# AI Provider Clients (Native or HTTPX based)
+google-genai>=0.1.0; sys_platform == 'never' # we use direct REST HTTPX for maximum control & resilience or official SDK
+openai>=1.12.0
+
+# Testing
+pytest>=8.0.0
+pytest-asyncio>=0.23.0

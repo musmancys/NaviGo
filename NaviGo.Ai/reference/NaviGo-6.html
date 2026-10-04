@@ -1,0 +1,2933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NaviGo — Explore More. Plan Smarter.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   RESET + VARIABLES
+============================================================ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0B1F33;
+  --navy-2: #0F2A45;
+  --teal: #13B8A6;
+  --teal-dark: #0FA090;
+  --sky: #4DA3FF;
+  --bg: #F7F9F8;
+  --white: #FFFFFF;
+  --ink: #102A43;
+  --muted: #64748B;
+  --border: #E2E8F0;
+  --amber: #F59E0B;
+  --red: #EF4444;
+  --green: #10B981;
+  --shadow-soft: 0 4px 24px rgba(11, 31, 51, 0.06);
+  --shadow-card: 0 10px 40px rgba(11, 31, 51, 0.08);
+  --shadow-lg: 0 20px 60px rgba(11, 31, 51, 0.14);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { display: block; max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ============================================================
+   SPLASH SCREEN — 2 seconds
+============================================================ */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 50%, #133a5c 100%);
+  display: grid;
+  place-items: center;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.splash.hide { opacity: 0; visibility: hidden; }
+
+.splash-inner { text-align: center; animation: splashIn 0.7s ease; }
+
+@keyframes splashIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.splash-logo {
+  width: 76px;
+  height: 76px;
+  border-radius: 22px;
+  background: var(--teal);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 22px;
+  box-shadow: 0 20px 60px rgba(19, 184, 166, 0.4);
+}
+
+@keyframes splashPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(19,184,166,0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 24px 70px rgba(19,184,166,0.6); }
+}
+
+.splash-logo svg { width: 40px; height: 40px; }
+
+.splash h1 {
+  color: white;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.splash h1 span { color: var(--teal); }
+
+.splash p {
+  color: rgba(255,255,255,0.65);
+  font-size: 13.5px;
+  margin-top: 8px;
+  letter-spacing: 0.05em;
+}
+
+.splash-loader {
+  width: 140px;
+  height: 3px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 999px;
+  margin: 28px auto 0;
+  overflow: hidden;
+}
+
+.splash-loader::after {
+  content: '';
+  display: block;
+  height: 100%;
+  width: 40%;
+  background: var(--teal);
+  border-radius: 999px;
+  animation: splashLoad 1.4s ease-in-out infinite;
+}
+
+@keyframes splashLoad {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+/* ============================================================
+   NAVBAR
+============================================================ */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 20px rgba(11, 31, 51, 0.04);
+}
+
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-weight: 900;
+  font-size: 21px;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+  transition: transform 0.2s;
+}
+
+.logo:hover { transform: scale(1.02); }
+
+.logo-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+  display: grid;
+  place-items: center;
+  position: relative;
+  box-shadow: 0 6px 18px rgba(11,31,51,0.18);
+}
+
+.logo-mark svg { width: 22px; height: 22px; color: var(--teal); }
+
+.logo-mark::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: 2px solid white;
+}
+
+.logo span span { color: var(--teal); }
+
+.nav-links { display: flex; gap: 4px; list-style: none; align-items: center; }
+
+.nav-links a {
+  position: relative;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--ink);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-links a svg { width: 15px; height: 15px; opacity: 0.75; }
+
+.nav-links a:hover { background: rgba(19, 184, 166, 0.08); color: var(--teal); }
+.nav-links a.active { color: var(--teal); background: rgba(19, 184, 166, 0.1); }
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 3px;
+  background: var(--teal);
+  border-radius: 999px;
+}
+
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  background: var(--teal);
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.25s;
+  box-shadow: 0 6px 20px rgba(19, 184, 166, 0.28);
+}
+
+.btn-primary:hover {
+  background: var(--teal-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(19, 184, 166, 0.4);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  background: white;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--muted); transform: translateY(-1px); }
+
+.menu-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(19,184,166,0.08);
+  color: var(--teal);
+  font-size: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+.hero {
+  position: relative;
+  min-height: 640px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 0 150px;
+  overflow: hidden;
+}
+
+.hero-bg { position: absolute; inset: 0; z-index: -1; }
+.hero-bg img { width: 100%; height: 100%; object-fit: cover; }
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11,31,51,0.88) 0%, rgba(11,31,51,0.55) 45%, rgba(11,31,51,0.95) 100%);
+}
+
+.hero-content { position: relative; color: white; max-width: 720px; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  backdrop-filter: blur(8px);
+}
+
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 10px var(--teal);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.hero h1 {
+  font-size: clamp(38px, 6vw, 68px);
+  font-weight: 900;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  margin-bottom: 22px;
+}
+
+.hero h1 .accent { color: var(--teal); }
+.hero p { font-size: 18px; color: rgba(255,255,255,0.85); max-width: 540px; }
+
+.search-card-wrap {
+  max-width: 1120px;
+  margin: -120px auto 0;
+  position: relative;
+  z-index: 10;
+  padding: 0 20px;
+}
+
+.search-card {
+  background: white;
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid #F1F5F9;
+}
+
+.search-card h3 {
+  font-size: 19px;
+  font-weight: 800;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-fields { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 7px;
+}
+
+.field select, .field input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ink);
+  background: white;
+  font-weight: 500;
+  transition: all 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+}
+
+.field select:focus, .field input:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(19,184,166,0.12);
+}
+
+.search-card-footer { display: flex; justify-content: flex-end; margin-top: 22px; }
+
+/* ============================================================
+   SECTIONS
+============================================================ */
+.section { padding: 90px 0; }
+.section-sm { padding: 45px 0; }
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 44px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.section-head h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 900; letter-spacing: -0.025em; line-height: 1.1; }
+.section-head p { color: var(--muted); margin-top: 10px; font-size: 15px; }
+
+.link-arrow {
+  color: var(--teal);
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: gap 0.2s;
+}
+.link-arrow:hover { gap: 10px; }
+
+.dest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+.dest-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  border: 1px solid #F1F5F9;
+  position: relative;
+}
+
+.dest-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(19,184,166,0.2);
+}
+
+.dest-img { position: relative; height: 220px; overflow: hidden; }
+
+.dest-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dest-card:hover .dest-img img { transform: scale(1.08); }
+
+.dest-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 6px 13px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+
+.dest-price {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 6px 13px;
+  background: rgba(11,31,51,0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: white;
+}
+
+.dest-body {
+  padding: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.dest-body h3 { font-size: 18px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.01em; }
+.dest-body p { color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+
+.dest-arrow {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(19,184,166,0.1);
+  color: var(--teal);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  transition: all 0.35s;
+}
+
+.dest-card:hover .dest-arrow {
+  background: var(--teal);
+  color: white;
+}
+
+.featured {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.featured img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+.featured-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(11,31,51,0.95) 0%, rgba(11,31,51,0.65) 55%, transparent 100%);
+}
+
+.featured-content { position: relative; color: white; padding: 60px 64px; max-width: 620px; }
+
+.featured-content .eyebrow {
+  color: var(--teal);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+.featured-content h2 {
+  font-size: clamp(34px, 5vw, 54px);
+  font-weight: 900;
+  margin: 14px 0 26px;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.featured-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  color: rgba(255,255,255,0.88);
+  font-size: 14.5px;
+  margin-bottom: 34px;
+  font-weight: 500;
+}
+
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+.step-card {
+  background: white;
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.35s;
+  border: 1px solid #F1F5F9;
+}
+
+.step-card:hover {
+  box-shadow: var(--shadow-card);
+  transform: translateY(-4px);
+  border-color: rgba(19,184,166,0.2);
+}
+
+.step-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.step-num { font-size: 40px; font-weight: 900; color: rgba(19,184,166,0.22); letter-spacing: -0.03em; }
+
+.step-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(19,184,166,0.1);
+  color: var(--teal);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+}
+
+.step-card h3 { font-size: 21px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.01em; }
+.step-card p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+.center-head { text-align: center; max-width: 640px; margin: 0 auto 58px; }
+
+/* ============================================================
+   PAGE HEADINGS
+============================================================ */
+.page-head { margin-bottom: 34px; }
+.page-head h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 900; letter-spacing: -0.025em; line-height: 1.1; }
+.page-head p { color: var(--muted); margin-top: 10px; font-size: 15px; }
+
+/* ============================================================
+   EXPLORE PAGE
+============================================================ */
+.search-input-wrap { position: relative; margin-bottom: 20px; }
+
+.search-input-wrap svg {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--muted);
+}
+
+.search-input-wrap input {
+  width: 100%;
+  padding: 15px 18px 15px 50px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  font-size: 14.5px;
+  font-family: inherit;
+  background: white;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.search-input-wrap input:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(19,184,166,0.12);
+}
+
+.chips-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+
+.chip {
+  padding: 9px 17px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--ink);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chip:hover { border-color: rgba(19,184,166,0.5); color: var(--teal); transform: translateY(-1px); }
+.chip.active { background: var(--teal); color: white; border-color: var(--teal); box-shadow: 0 6px 16px rgba(19,184,166,0.3); }
+
+.explore-grid { display: grid; grid-template-columns: 1.9fr 1fr; gap: 24px; }
+
+.map-area {
+  position: relative;
+  height: 620px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1.5px solid #D6E0E8;
+  box-shadow: inset 0 0 60px rgba(77,163,255,0.08), var(--shadow-soft);
+  background:
+    radial-gradient(circle at 25% 30%, #E6F3EA 0%, transparent 45%),
+    radial-gradient(circle at 75% 65%, #E5F0F8 0%, transparent 45%),
+    linear-gradient(135deg, #EAF4EC 0%, #EAF3F8 60%, #E5EEF4 100%);
+}
+
+.map-area::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(148,163,184,0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148,163,184,0.12) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+.map-area::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 55%, rgba(77,163,255,0.15) 0%, transparent 30%);
+  pointer-events: none;
+}
+
+.map-river { position: absolute; inset: 0; pointer-events: none; }
+.map-roads { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+.map-legend {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--border);
+  display: flex;
+  gap: 14px;
+  font-size: 11.5px;
+  font-weight: 600;
+  flex-wrap: wrap;
+  max-width: calc(100% - 32px);
+}
+
+.map-legend span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.map-legend .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+.map-zoom { position: absolute; top: 16px; right: 16px; display: flex; flex-direction: column; gap: 6px; }
+
+.map-zoom button {
+  width: 34px;
+  height: 34px;
+  background: rgba(255,255,255,0.96);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  transition: all 0.2s;
+}
+
+.map-zoom button:hover { background: var(--teal); color: white; border-color: var(--teal); }
+
+.map-pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  transition: transform 0.25s;
+  z-index: 5;
+}
+
+.map-pin:hover { z-index: 20; }
+.map-pin.active { z-index: 20; }
+
+.pin-bubble {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: white;
+  border: 2px solid white;
+  box-shadow: 0 8px 24px rgba(11,31,51,0.18);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  transition: all 0.25s;
+  position: relative;
+}
+
+.pin-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: inherit;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+}
+
+.map-pin.active .pin-bubble { background: var(--teal); color: white; }
+
+.places-list { display: flex; flex-direction: column; gap: 12px; max-height: 620px; overflow-y: auto; padding-right: 4px; }
+.places-list::-webkit-scrollbar { width: 6px; }
+.places-list::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 6px; }
+
+.place-item {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  border: 1.5px solid #F1F5F9;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.place-item:hover { box-shadow: var(--shadow-card); border-color: rgba(19,184,166,0.3); transform: translateX(3px); }
+.place-item.active { border-color: var(--teal); box-shadow: var(--shadow-card); }
+
+.place-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: rgba(19,184,166,0.1);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.place-item h4 { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+.place-item .loc { font-size: 12px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+.place-item p { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+/* ============================================================
+   PLAN TRIP
+============================================================ */
+.plan-form {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: var(--shadow-card);
+  border: 1px solid #F1F5F9;
+}
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 22px; }
+
+.form-field label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 9px; color: var(--ink); }
+
+.form-field select, .form-field input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  font-family: inherit;
+  background: white;
+  color: var(--ink);
+  font-weight: 500;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  transition: all 0.2s;
+}
+
+.form-field select:focus, .form-field input:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 4px rgba(19,184,166,0.12);
+}
+
+.form-full { margin-bottom: 22px; }
+
+.loading-view { max-width: 580px; margin: 0 auto; text-align: center; padding: 80px 20px; }
+
+.loading-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
+  background: rgba(19,184,166,0.1);
+  display: grid;
+  place-items: center;
+  font-size: 34px;
+  margin: 0 auto 26px;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.85; }
+}
+
+.loading-view h2 { font-size: 26px; font-weight: 900; margin-bottom: 36px; letter-spacing: -0.02em; }
+
+.loading-steps { text-align: left; max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+
+.loading-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.35;
+  transition: opacity 0.4s;
+}
+
+.loading-step.done { opacity: 1; }
+
+.step-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #E2E8F0;
+  color: var(--muted);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 800;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+
+.loading-step.done .step-check { background: var(--teal); color: white; }
+
+.result-head { margin-bottom: 34px; }
+.result-head h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 900; letter-spacing: -0.025em; }
+.result-head p { color: var(--muted); margin-top: 8px; font-size: 15px; font-weight: 500; }
+
+.result-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 26px; }
+.timeline-col { display: flex; flex-direction: column; gap: 18px; }
+
+.day-card {
+  background: white;
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid #F1F5F9;
+}
+
+.day-badge {
+  display: inline-block;
+  padding: 6px 13px;
+  border-radius: 9px;
+  background: var(--navy);
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+}
+
+.timeline { position: relative; padding-left: 26px; }
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--teal) 0%, rgba(19,184,166,0.15) 100%);
+  border-radius: 2px;
+}
+
+.tl-item {
+  position: relative;
+  padding: 7px 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.tl-item:last-child { padding-bottom: 0; }
+
+.tl-dot {
+  position: absolute;
+  left: -26px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 4px rgba(19,184,166,0.18);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.tl-item .pin { color: var(--teal); font-size: 13px; }
+
+.budget-card {
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid #F1F5F9;
+  position: sticky;
+  top: 92px;
+}
+
+.budget-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 20px; }
+
+.budget-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 9px 0;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.budget-row strong { color: var(--ink); font-weight: 700; }
+
+.budget-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0 0;
+  margin-top: 10px;
+  border-top: 1.5px solid var(--border);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.budget-total span:last-child { font-size: 22px; color: var(--navy); font-weight: 900; }
+
+.budget-badge {
+  margin-top: 20px;
+  padding: 13px 16px;
+  border-radius: 12px;
+  background: rgba(16,185,129,0.1);
+  color: #059669;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ============================================================
+   HISTORY PAGE
+============================================================ */
+.history-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 8px; }
+
+.history-card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid #F1F5F9;
+  display: flex;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.history-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+  border-color: rgba(19,184,166,0.25);
+}
+
+.history-img { width: 130px; flex-shrink: 0; position: relative; overflow: hidden; }
+.history-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.history-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.history-body h3 { font-size: 16.5px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.01em; }
+
+.history-body .meta {
+  font-size: 12.5px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.history-body .meta span { display: inline-flex; align-items: center; gap: 4px; }
+
+.history-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+
+.history-status.completed { background: rgba(16,185,129,0.1); color: #059669; }
+.history-status.upcoming { background: rgba(77,163,255,0.12); color: #2563EB; }
+.history-status.draft { background: rgba(245,158,11,0.12); color: #B45309; }
+
+/* ============================================================
+   AI CHAT
+============================================================ */
+.chat-wrap { max-width: 800px; margin: 0 auto; }
+
+.chat-card {
+  background: white;
+  border-radius: 24px;
+  padding: 26px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  min-height: 560px;
+  border: 1px solid #F1F5F9;
+}
+
+.chat-messages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 16px;
+  overflow-y: auto;
+  max-height: 460px;
+}
+
+.chat-messages::-webkit-scrollbar { width: 6px; }
+.chat-messages::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 6px; }
+
+.msg { display: flex; max-width: 88%; }
+.msg.user { align-self: flex-end; justify-content: flex-end; }
+
+.msg-bubble {
+  padding: 13px 17px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.msg.user .msg-bubble {
+  background: var(--navy);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.msg.ai .msg-bubble {
+  background: #F1F5F9;
+  color: var(--ink);
+  border-bottom-left-radius: 4px;
+}
+
+.msg-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+
+.msg-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 12px;
+}
+
+.msg-card .emoji { font-size: 20px; margin-bottom: 8px; }
+.msg-card strong { display: block; margin-bottom: 3px; font-weight: 700; }
+.msg-card small { color: var(--muted); font-weight: 500; }
+
+.quick-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+
+.quick-btn {
+  padding: 9px 15px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  transition: all 0.2s;
+}
+
+.quick-btn:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-1px); }
+
+.chat-input-row { display: flex; gap: 10px; }
+
+.chat-input {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.chat-input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 4px rgba(19,184,166,0.12); }
+
+/* ============================================================
+   PHOTO ANALYZER
+============================================================ */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 22px;
+  padding: 64px 20px;
+  text-align: center;
+  transition: all 0.25s;
+  cursor: pointer;
+  background: white;
+}
+
+.upload-zone:hover { border-color: var(--teal); background: rgba(19,184,166,0.02); }
+
+.upload-zone .icon { font-size: 52px; margin-bottom: 18px; }
+.upload-zone h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+.upload-zone p { color: var(--muted); font-size: 14px; }
+
+.preview-img {
+  border-radius: 18px;
+  max-height: 400px;
+  width: 100%;
+  object-fit: cover;
+  margin-bottom: 18px;
+}
+
+.analysis-card {
+  background: white;
+  border-radius: 20px;
+  padding: 26px;
+  border-left: 4px solid var(--amber);
+  box-shadow: var(--shadow-card);
+  margin-top: 24px;
+}
+
+.analysis-card .warn {
+  color: var(--amber);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.analysis-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+.analysis-card p { color: var(--muted); font-size: 14.5px; line-height: 1.6; }
+
+.reports-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 18px; }
+
+.report-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid #F1F5F9;
+  transition: all 0.25s;
+}
+
+.report-card:hover { box-shadow: var(--shadow-card); transform: translateY(-2px); }
+
+.report-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+  letter-spacing: 0.06em;
+}
+
+.status-dot { width: 8px; height: 8px; border-radius: 50%; }
+.status-dot.open { background: var(--green); box-shadow: 0 0 8px rgba(16,185,129,0.5); }
+.status-dot.caution { background: var(--amber); box-shadow: 0 0 8px rgba(245,158,11,0.5); }
+.status-dot.closed { background: var(--red); box-shadow: 0 0 8px rgba(239,68,68,0.5); }
+
+.report-card h4 { font-size: 15.5px; font-weight: 800; margin-bottom: 5px; }
+.report-card p { font-size: 13px; color: var(--muted); font-weight: 500; }
+
+/* ============================================================
+   DESTINATION PAGE
+============================================================ */
+.dest-hero {
+  position: relative;
+  border-radius: 26px;
+  overflow: hidden;
+  min-height: 460px;
+  display: flex;
+  align-items: flex-end;
+  box-shadow: var(--shadow-lg);
+}
+
+.dest-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+.dest-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(11,31,51,0.96) 100%);
+}
+
+.dest-hero-content { position: relative; padding: 48px; color: white; width: 100%; }
+
+.popular-badge {
+  display: inline-block;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px);
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.dest-hero-content h1 { font-size: clamp(34px, 6vw, 56px); font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; }
+.dest-hero-content p { color: rgba(255,255,255,0.88); max-width: 560px; margin-top: 10px; font-size: 15.5px; }
+
+.dest-detail-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 26px; margin-top: 34px; }
+
+.detail-card {
+  background: white;
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid #F1F5F9;
+  margin-bottom: 22px;
+}
+
+.detail-card h2 { font-size: 21px; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.01em; }
+.detail-card p { color: var(--muted); font-size: 14.5px; line-height: 1.7; }
+
+.meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+
+.meta-chip { padding: 8px 15px; border-radius: 999px; background: #F1F5F9; font-size: 13px; font-weight: 600; }
+.meta-chip.green { background: rgba(16,185,129,0.1); color: #059669; }
+
+.popular-places { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+.place-box {
+  background: #F8FAFC;
+  border-radius: 14px;
+  padding: 18px;
+  border: 1.5px solid var(--border);
+  transition: all 0.2s;
+}
+
+.place-box:hover { border-color: var(--teal); background: rgba(19,184,166,0.03); }
+.place-box .emoji { font-size: 24px; margin-bottom: 10px; }
+.place-box strong { display: block; font-size: 13.5px; font-weight: 700; }
+
+.weather-card, .road-card {
+  background: white;
+  border-radius: 22px;
+  padding: 26px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid #F1F5F9;
+  margin-bottom: 22px;
+}
+
+.weather-top { display: flex; justify-content: space-between; align-items: flex-start; }
+
+.weather-temp {
+  font-size: 46px;
+  font-weight: 900;
+  color: var(--ink);
+  margin: 8px 0 4px;
+  letter-spacing: -0.03em;
+}
+
+.weather-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: rgba(77,163,255,0.1);
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+}
+
+.weather-hl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 22px;
+  padding-top: 22px;
+  border-top: 1.5px solid var(--border);
+}
+
+.weather-hl small { display: block; color: var(--muted); font-size: 12px; margin-bottom: 3px; font-weight: 600; }
+.weather-hl strong { font-size: 17px; font-weight: 800; }
+
+.road-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; font-size: 15px; font-weight: 600; }
+
+.road-updated {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1.5px solid var(--border);
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+/* ============================================================
+   PROFILE
+============================================================ */
+.profile-head {
+  background: white;
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid #F1F5F9;
+}
+
+.avatar {
+  width: 78px;
+  height: 78px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, var(--teal) 0%, var(--sky) 100%);
+  display: grid;
+  place-items: center;
+  color: white;
+  font-size: 30px;
+  font-weight: 900;
+  flex-shrink: 0;
+  box-shadow: 0 10px 24px rgba(19,184,166,0.3);
+}
+
+.profile-head h1 { font-size: 26px; font-weight: 900; letter-spacing: -0.02em; }
+.profile-head p { color: var(--muted); font-size: 14.5px; font-weight: 500; margin-top: 3px; }
+
+.profile-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; }
+
+.menu-card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid #F1F5F9;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+
+.menu-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-card); border-color: rgba(19,184,166,0.25); }
+.menu-card .arrow { color: var(--muted); }
+
+.empty-state {
+  background: white;
+  border-radius: 22px;
+  padding: 60px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid #F1F5F9;
+  margin-top: 22px;
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: rgba(19,184,166,0.1);
+  color: var(--teal);
+  display: grid;
+  place-items: center;
+  font-size: 28px;
+  margin: 0 auto 20px;
+}
+
+.empty-state h3 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+.empty-state p { color: var(--muted); font-size: 14.5px; margin-bottom: 24px; }
+
+/* ============================================================
+   FOOTER
+============================================================ */
+.footer { background: var(--navy); color: white; margin-top: 90px; padding: 64px 0 26px; }
+
+.footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 44px; padding-bottom: 44px; }
+
+.footer-brand .logo { color: white; margin-bottom: 16px; }
+.footer-brand .logo-mark { background: var(--teal); }
+.footer-brand .logo-mark svg { color: var(--navy); }
+
+.footer-brand p {
+  color: rgba(255,255,255,0.72);
+  font-size: 14.5px;
+  max-width: 340px;
+  line-height: 1.65;
+}
+
+.footer-social { display: flex; gap: 10px; margin-top: 22px; }
+
+.footer-social a {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+  display: grid;
+  place-items: center;
+  transition: all 0.2s;
+  font-size: 16px;
+}
+
+.footer-social a:hover { background: var(--teal); transform: translateY(-2px); }
+
+.footer-col h4 { font-size: 14px; font-weight: 800; margin-bottom: 16px; letter-spacing: 0.02em; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+
+.footer-col a {
+  color: rgba(255,255,255,0.72);
+  font-size: 14px;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+
+.footer-col a:hover { color: var(--teal); }
+
+.footer-bottom {
+  padding-top: 26px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+  color: rgba(255,255,255,0.55);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ============================================================
+   MOBILE BOTTOM NAV
+============================================================ */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border);
+  z-index: 200;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: end;
+  padding: 8px 6px calc(8px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -2px 12px rgba(11,31,51,0.06);
+}
+
+.mobile-bottom-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 0 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  transition: color 0.25s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-bottom-nav .nav-ico {
+  width: 40px;
+  height: 32px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  color: var(--c);
+  transition: background 0.2s;
+}
+
+.mobile-bottom-nav .nav-ico svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mobile-bottom-nav a:nth-child(1) { --c: #0FA090; --tint: rgba(19,184,166,0.14); }
+.mobile-bottom-nav a:nth-child(2) { --c: #2F86F0; --tint: rgba(47,134,240,0.14); }
+.mobile-bottom-nav a:nth-child(3) { --c: #E08A0B; --tint: rgba(245,158,11,0.16); }
+.mobile-bottom-nav a:nth-child(4) { --c: #7C3AED; --tint: rgba(124,58,237,0.13); }
+.mobile-bottom-nav a:nth-child(5) { --c: #E11D74; --tint: rgba(225,29,116,0.12); }
+
+.mobile-bottom-nav a.active { color: var(--c); }
+.mobile-bottom-nav a.active .nav-ico { background: var(--tint); }
+
+/* ============================================================
+   PAGE VISIBILITY
+============================================================ */
+.page { display: none; }
+.page.active { display: block; animation: fadeUp 0.4s ease; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hidden { display: none !important; }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 960px) {
+  .search-fields { grid-template-columns: 1fr 1fr; }
+  .dest-grid { grid-template-columns: 1fr 1fr; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .explore-grid { grid-template-columns: 1fr; }
+  .result-grid { grid-template-columns: 1fr; }
+  .dest-detail-grid { grid-template-columns: 1fr; }
+  .budget-card { position: static; }
+  .footer-grid { grid-template-columns: 1fr; gap: 34px; }
+  .history-grid { grid-template-columns: 1fr; }
+  .map-area { height: 460px; }
+  .places-list { max-height: none; }
+}
+
+@media (max-width: 700px) {
+  .nav-links { display: none; }
+  .nav-links.mobile-open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 72px;
+    left: 12px;
+    right: 12px;
+    background: white;
+    padding: 14px;
+    border-radius: 18px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border);
+    gap: 4px;
+    animation: fadeUp 0.25s ease;
+  }
+  .nav-links.mobile-open a { width: 100%; padding: 14px 16px; }
+  .menu-toggle { display: flex; }
+  .navbar-inner { height: 64px; }
+
+  .hero { min-height: 540px; padding: 60px 0 130px; }
+  .hero h1 { font-size: 38px; }
+  .hero p { font-size: 15.5px; }
+
+  .search-card { padding: 22px; border-radius: 20px; }
+  .search-fields { grid-template-columns: 1fr; gap: 14px; }
+  .search-card-wrap { margin-top: -100px; }
+
+  .section { padding: 60px 0; }
+  .section-sm { padding: 30px 0; }
+  .section-head { margin-bottom: 30px; }
+  .dest-grid { grid-template-columns: 1fr; gap: 18px; }
+  .dest-img { height: 200px; }
+  .featured-content { padding: 34px 24px; }
+  .featured { min-height: 420px; border-radius: 22px; }
+  .featured-content h2 { font-size: 34px; }
+  .featured-meta { gap: 14px; font-size: 13.5px; }
+
+  .popular-places { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .reports-grid { grid-template-columns: 1fr; }
+  .profile-menu { grid-template-columns: 1fr; }
+  .plan-form { padding: 24px; border-radius: 20px; }
+  .map-area { height: 400px; border-radius: 18px; }
+  .map-legend { font-size: 10.5px; padding: 10px 12px; gap: 10px; }
+  .map-zoom button { width: 30px; height: 30px; font-size: 14px; }
+
+  .mobile-bottom-nav { display: grid; }
+  body { padding-bottom: 78px; }
+  .msg-cards { grid-template-columns: 1fr; }
+  .chat-card { padding: 18px; border-radius: 20px; min-height: 500px; }
+  .chat-messages { max-height: 400px; }
+
+  .dest-hero { min-height: 380px; border-radius: 22px; }
+  .dest-hero-content { padding: 30px 22px; }
+  .detail-card { padding: 22px; border-radius: 18px; }
+  .weather-card, .road-card { padding: 22px; border-radius: 18px; }
+  .weather-temp { font-size: 38px; }
+  .profile-head { padding: 22px; }
+  .avatar { width: 66px; height: 66px; font-size: 26px; }
+  .profile-head h1 { font-size: 22px; }
+  .history-img { width: 105px; }
+  .history-body { padding: 16px; }
+  .history-body h3 { font-size: 15px; }
+
+  .footer { margin-top: 60px; padding: 48px 0 24px; }
+}
+
+@media (max-width: 420px) {
+  .dest-img { height: 180px; }
+  .dest-body { padding: 18px; }
+  .hero h1 { font-size: 34px; }
+  .search-card { padding: 18px; }
+}
+
+/* ============================================================
+   TOAST
+============================================================ */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--navy);
+  color: white;
+  padding: 13px 24px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+  z-index: 500;
+  max-width: calc(100% - 40px);
+  text-align: center;
+}
+
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-inner">
+    <div class="splash-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor"/>
+      </svg>
+    </div>
+    <h1>Navi<span>Go</span></h1>
+    <p>EXPLORE MORE. PLAN SMARTER.</p>
+    <div class="splash-loader"></div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="container navbar-inner">
+    <a href="#" class="logo" onclick="showPage('home'); return false;">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor"/>
+        </svg>
+      </div>
+      <span>Navi<span>Go</span></span>
+    </a>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#" class="nav-link active" data-page="home" onclick="showPage('home'); closeMobileMenu(); return false;">Home</a></li>
+        <li><a href="#" class="nav-link" data-page="explore" onclick="showPage('explore'); closeMobileMenu(); return false;">Explore</a></li>
+        <li><a href="#" class="nav-link" data-page="plan" onclick="showPage('plan'); closeMobileMenu(); return false;">Plan Trip</a></li>
+        <li><a href="#" class="nav-link" data-page="assistant" onclick="showPage('assistant'); closeMobileMenu(); return false;">AI Assistant</a></li>
+        <li><a href="#" class="nav-link" data-page="history" onclick="showPage('history'); closeMobileMenu(); return false;">History</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn-primary" onclick="showPage('plan')">Get Started</button>
+      <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- HOME -->
+<section id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2000&q=80" alt="Mountains">
+    </div>
+    <div class="container hero-content">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Explore Pakistan with NaviGo
+      </div>
+      <h1>Explore More.<br><span class="accent">Plan Smarter.</span></h1>
+      <p>Discover Pakistan, create personalized trips, and explore destinations with NaviGo.</p>
+    </div>
+  </div>
+
+  <div class="search-card-wrap">
+    <div class="search-card">
+      <h3>🗺️ Where are you going?</h3>
+      <div class="search-fields">
+        <div class="field">
+          <label>Destination</label>
+          <select>
+            <option>Naran</option>
+            <option>Hunza</option>
+            <option>Skardu</option>
+            <option>Swat</option>
+            <option>Murree</option>
+            <option>Kashmir</option>
+            <option>Gilgit</option>
+            <option>Fairy Meadows</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Duration</label>
+          <select>
+            <option>1 Day</option>
+            <option selected>3 Days</option>
+            <option>5 Days</option>
+            <option>7 Days</option>
+            <option>10 Days</option>
+            <option>14 Days</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Travelers</label>
+          <select>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option selected>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>8</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Budget</label>
+          <select>
+            <option>Rs. 15,000</option>
+            <option>Rs. 25,000</option>
+            <option selected>Rs. 35,000</option>
+            <option>Rs. 50,000</option>
+            <option>Rs. 75,000</option>
+            <option>Rs. 100,000</option>
+          </select>
+        </div>
+      </div>
+      <div class="search-card-footer">
+        <button class="btn-primary" onclick="showPage('plan')">✨ Create AI Trip</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>Explore Pakistan</h2>
+          <p>Discover places worth visiting.</p>
+        </div>
+        <a href="#" class="link-arrow" onclick="showPage('explore'); return false;">View all →</a>
+      </div>
+
+      <div class="dest-grid">
+        <div class="dest-card" onclick="showDestination('naran')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="Naran">
+            <span class="dest-tag">Nature • Adventure</span>
+            <span class="dest-price">From Rs. 12,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Naran</h3>
+              <p>Alpine valley with lakes, rivers, and the Babusar Top gateway.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('hunza')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=800&q=80" alt="Hunza">
+            <span class="dest-tag">Mountains • Culture</span>
+            <span class="dest-price">From Rs. 22,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Hunza</h3>
+              <p>Land of forts, apricot blossoms, and dramatic mountain peaks.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('skardu')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=800&q=80" alt="Skardu">
+            <span class="dest-tag">Adventure • Landscapes</span>
+            <span class="dest-price">From Rs. 25,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Skardu</h3>
+              <p>Gateway to the Karakoram — lakes, deserts, and glaciers.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('kashmir')">
+          <div class="dest-img">
+            <img onerror="kashFallback(this)" src="https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=800&q=80" alt="Kashmir">
+            <span class="dest-tag">Lakes • Paradise</span>
+            <span class="dest-price">From Rs. 18,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Kashmir</h3>
+              <p>Heaven on earth — Dal Lake, houseboats, and lush valleys.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('gilgit')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80" alt="Gilgit">
+            <span class="dest-tag">Valleys • Rivers</span>
+            <span class="dest-price">From Rs. 20,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Gilgit</h3>
+              <p>Gateway to the northern valleys, rivers, and rugged peaks.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('fairy')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="Fairy Meadows">
+            <span class="dest-tag">Meadows • Nanga Parbat</span>
+            <span class="dest-price">From Rs. 8,500</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Fairy Meadows</h3>
+              <p>Green pastures at the foot of Nanga Parbat — cheapest escape.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('swat')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=800&q=80" alt="Swat">
+            <span class="dest-tag">Nature • Relaxation</span>
+            <span class="dest-price">From Rs. 10,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Swat</h3>
+              <p>The Switzerland of Pakistan — rivers, meadows, pine forests.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+
+        <div class="dest-card" onclick="showDestination('murree')">
+          <div class="dest-img">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80" alt="Murree">
+            <span class="dest-tag">Hills • Weekend</span>
+            <span class="dest-price">From Rs. 6,000</span>
+          </div>
+          <div class="dest-body">
+            <div>
+              <h3>Murree</h3>
+              <p>Classic hill station — pine trees, cool air, and Mall Road.</p>
+            </div>
+            <div class="dest-arrow">↗</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="featured">
+        <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=2000&q=80" alt="Hunza">
+        <div class="featured-overlay"></div>
+        <div class="featured-content">
+          <div class="eyebrow">Featured</div>
+          <h2>Discover Hunza</h2>
+          <div class="featured-meta">
+            <span>🏔️ Mountain destination</span>
+            <span>🌤️ Great for nature</span>
+            <span>📍 Gilgit-Baltistan</span>
+          </div>
+          <button class="btn-primary" onclick="showDestination('hunza')">Explore Destination →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="center-head">
+        <h2 style="font-size:clamp(28px,4vw,40px);font-weight:900;letter-spacing:-0.025em;">How NaviGo works</h2>
+        <p style="color:var(--muted);margin-top:14px;font-size:15px;">Three simple steps to your next adventure.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-top">
+            <span class="step-num">01</span>
+            <span class="step-icon">🧭</span>
+          </div>
+          <h3>Choose</h3>
+          <p>Select your destination and preferences.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-top">
+            <span class="step-num">02</span>
+            <span class="step-icon">✨</span>
+          </div>
+          <h3>Plan</h3>
+          <p>NaviGo creates a personalized trip plan.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-top">
+            <span class="step-num">03</span>
+            <span class="step-icon">📍</span>
+          </div>
+          <h3>Explore</h3>
+          <p>Discover places and travel information.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- EXPLORE -->
+<section id="page-explore" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
+    <div class="page-head">
+      <h1>Explore Pakistan</h1>
+      <p>Search destinations, hotels, restaurants, and more.</p>
+    </div>
+
+    <div class="search-input-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Search destinations or places..." oninput="filterPlaces()">
+    </div>
+
+    <div class="chips-row" id="categoryChips">
+      <button class="chip active" data-cat="all" onclick="setCategory(this)">🗺️ All</button>
+      <button class="chip" data-cat="attraction" onclick="setCategory(this)">🏔️ Attractions</button>
+      <button class="chip" data-cat="hotel" onclick="setCategory(this)">🏨 Hotels</button>
+      <button class="chip" data-cat="restaurant" onclick="setCategory(this)">🍽️ Restaurants</button>
+      <button class="chip" data-cat="fuel" onclick="setCategory(this)">⛽ Fuel</button>
+      <button class="chip" data-cat="hospital" onclick="setCategory(this)">🏥 Emergency</button>
+    </div>
+
+    <div class="explore-grid">
+      <div class="map-area" id="mapArea">
+        <svg class="map-roads" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M 5 45 Q 30 35 50 55 T 95 60" stroke="#94A3B8" stroke-width="0.9" fill="none" stroke-dasharray="3 2" opacity="0.65"/>
+          <path d="M 20 90 Q 40 60 60 40 T 90 15" stroke="#94A3B8" stroke-width="0.7" fill="none" stroke-dasharray="2 2" opacity="0.5"/>
+          <path d="M 0 70 Q 30 75 55 70 T 100 85" stroke="#94A3B8" stroke-width="0.6" fill="none" stroke-dasharray="2 3" opacity="0.45"/>
+        </svg>
+        <svg class="map-river" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M 0 25 Q 25 35 45 50 T 100 70" fill="none" stroke="#7DD3FC" stroke-width="1.1" opacity="0.55"/>
+          <path d="M 10 100 Q 30 75 55 62 T 100 50" fill="none" stroke="#7DD3FC" stroke-width="0.7" opacity="0.4"/>
+        </svg>
+
+        <div class="map-legend">
+          <span><span class="dot" style="background:#13B8A6"></span> Attraction</span>
+          <span><span class="dot" style="background:#4DA3FF"></span> Hotel</span>
+          <span><span class="dot" style="background:#F59E0B"></span> Restaurant</span>
+          <span><span class="dot" style="background:#0B1F33"></span> Fuel</span>
+          <span><span class="dot" style="background:#EF4444"></span> Hospital</span>
+        </div>
+
+        <div class="map-zoom">
+          <button onclick="toast('Zoom +')">+</button>
+          <button onclick="toast('Zoom −')">−</button>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="font-weight:800;margin-bottom:16px;font-size:16px;">Nearby Places</h3>
+        <div class="places-list" id="placesList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLAN TRIP -->
+<section id="page-plan" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
+    <div id="planForm">
+      <div class="page-head">
+        <h1>Plan Your Journey</h1>
+        <p>Tell us what you want. NaviGo creates the plan.</p>
+      </div>
+
+      <div class="plan-form">
+        <div class="form-row">
+          <div class="form-field">
+            <label>Destination</label>
+            <select>
+              <option>Naran</option>
+              <option>Hunza</option>
+              <option>Skardu</option>
+              <option>Swat</option>
+              <option>Murree</option>
+              <option>Kashmir</option>
+              <option>Gilgit</option>
+              <option>Fairy Meadows</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Duration</label>
+            <select id="planDuration">
+              <option>1 Day</option>
+              <option selected>3 Days</option>
+              <option>5 Days</option>
+              <option>7 Days</option>
+              <option>10 Days</option>
+              <option>14 Days</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label>Travelers</label>
+            <select id="planTravelers">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option selected>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>8</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Budget</label>
+            <select>
+              <option>Rs. 15,000</option>
+              <option>Rs. 25,000</option>
+              <option selected>Rs. 35,000</option>
+              <option>Rs. 50,000</option>
+              <option>Rs. 75,000</option>
+              <option>Rs. 100,000</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-full">
+          <label style="font-size:14px;font-weight:700;display:block;margin-bottom:10px;color:var(--ink);">Interests</label>
+          <div class="chips-row" style="margin-bottom:0;">
+            <button class="chip active" onclick="this.classList.toggle('active')">🌲 Nature</button>
+            <button class="chip active" onclick="this.classList.toggle('active')">🧗 Adventure</button>
+            <button class="chip" onclick="this.classList.toggle('active')">🍽️ Food</button>
+            <button class="chip" onclick="this.classList.toggle('active')">📷 Photography</button>
+            <button class="chip" onclick="this.classList.toggle('active')">🏛️ Culture</button>
+            <button class="chip" onclick="this.classList.toggle('active')">😌 Relaxation</button>
+          </div>
+        </div>
+
+        <div class="form-full">
+          <label style="font-size:14px;font-weight:700;display:block;margin-bottom:10px;color:var(--ink);">Transport</label>
+          <select style="width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:12px;font-size:14px;font-family:inherit;background:white;color:var(--ink);font-weight:500;appearance:none;-webkit-appearance:none;padding-right:38px;">
+            <option>Car</option>
+            <option>Van</option>
+            <option>Bike</option>
+            <option>Bus</option>
+          </select>
+        </div>
+
+        <button class="btn-primary" style="width:100%;padding:16px;justify-content:center;font-size:15px;margin-top:8px;" onclick="generateTrip()">
+          ✨ Generate My Trip
+        </button>
+      </div>
+    </div>
+
+    <div id="planLoading" class="hidden">
+      <div class="loading-view">
+        <div class="loading-icon">✨</div>
+        <h2>NaviGo is planning your trip...</h2>
+        <div class="loading-steps" id="loadingSteps">
+          <div class="loading-step" data-step="0"><span class="step-check">1</span> Understanding your preferences</div>
+          <div class="loading-step" data-step="1"><span class="step-check">2</span> Selecting destinations</div>
+          <div class="loading-step" data-step="2"><span class="step-check">3</span> Creating itinerary</div>
+          <div class="loading-step" data-step="3"><span class="step-check">4</span> Preparing your plan</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="planResult" class="hidden">
+      <button class="btn-secondary" style="margin-bottom:20px;" onclick="backToForm()">← Back to form</button>
+      <div class="result-head">
+        <h1>Your Naran Adventure</h1>
+        <p id="resultMeta">3 Days • 4 Travelers</p>
+      </div>
+
+      <div class="result-grid">
+        <div class="timeline-col">
+          <div class="day-card">
+            <span class="day-badge">DAY 01</span>
+            <div class="timeline">
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Naran Bazaar</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Saif-ul-Malook</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Local Restaurant</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Hotel</div>
+            </div>
+          </div>
+
+          <div class="day-card">
+            <span class="day-badge">DAY 02</span>
+            <div class="timeline">
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Lulusar Lake</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Babusar Top</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Photography</div>
+            </div>
+          </div>
+
+          <div class="day-card">
+            <span class="day-badge">DAY 03</span>
+            <div class="timeline">
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Nearby Attractions</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Shopping</div>
+              <div class="tl-item"><span class="tl-dot"></span><span class="pin">📍</span> Return</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="budget-card">
+            <h3>Estimated Budget</h3>
+            <div class="budget-row"><span>Transport</span><strong>Rs. 10,500</strong></div>
+            <div class="budget-row"><span>Hotel</span><strong>Rs. 8,500</strong></div>
+            <div class="budget-row"><span>Food</span><strong>Rs. 6,500</strong></div>
+            <div class="budget-row"><span>Activities</span><strong>Rs. 4,000</strong></div>
+            <div class="budget-total"><span>Total</span><span>Rs. 29,500</span></div>
+            <div class="budget-badge">🟢 Within Budget</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI ASSISTANT -->
+<section id="page-assistant" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
+    <div class="page-head">
+      <h1>NaviGo AI</h1>
+      <p>Your travel companion — ask anything about your trip.</p>
+    </div>
+
+    <div class="chat-wrap">
+      <div class="chat-card">
+        <div class="chat-messages" id="chatMessages">
+          <div class="msg user">
+            <div class="msg-bubble">What can I visit in Naran tomorrow?</div>
+          </div>
+          <div class="msg ai">
+            <div class="msg-bubble">
+              Here are some suitable places based on your trip:
+              <div class="msg-cards">
+                <div class="msg-card"><div class="emoji">🏔️</div><strong>Saif-ul-Malook</strong><small>Popular in Naran</small></div>
+                <div class="msg-card"><div class="emoji">🏔️</div><strong>Lulusar Lake</strong><small>Scenic lake</small></div>
+                <div class="msg-card"><div class="emoji">🏔️</div><strong>Babusar Top</strong><small>Panoramic views</small></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quick-row">
+          <button class="quick-btn" onclick="askAI('Best places')">💎 Best places</button>
+          <button class="quick-btn" onclick="askAI('Budget options')">💰 Budget options</button>
+          <button class="quick-btn" onclick="askAI('Tomorrow plan')">📅 Tomorrow's plan</button>
+          <button class="quick-btn" onclick="askAI('Weather')">🌤️ Weather</button>
+        </div>
+
+        <div class="chat-input-row">
+          <input id="chatInput" class="chat-input" type="text" placeholder="Ask NaviGo anything..." onkeydown="if(event.key==='Enter') sendMessage()">
+          <button class="btn-primary" style="padding: 14px 20px;" onclick="sendMessage()">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section id="page-history" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px; max-width: 1000px;">
+    <div class="page-head">
+      <h1>Your Travel History</h1>
+      <p>Past trips, saved itineraries, and upcoming adventures.</p>
+    </div>
+
+    <div class="history-grid">
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <div class="history-img">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80" alt="Naran">
+        </div>
+        <div class="history-body">
+          <h3>Naran Adventure</h3>
+          <div class="meta"><span>📅 3 Days</span><span>👥 4 Travelers</span></div>
+          <span class="history-status completed">✓ Completed</span>
+        </div>
+      </div>
+
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <div class="history-img">
+          <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=400&q=80" alt="Hunza">
+        </div>
+        <div class="history-body">
+          <h3>Hunza Explorer</h3>
+          <div class="meta"><span>📅 5 Days</span><span>👥 2 Travelers</span></div>
+          <span class="history-status completed">✓ Completed</span>
+        </div>
+      </div>
+
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <div class="history-img">
+          <img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=400&q=80" alt="Skardu">
+        </div>
+        <div class="history-body">
+          <h3>Skardu Expedition</h3>
+          <div class="meta"><span>📅 7 Days</span><span>👥 6 Travelers</span></div>
+          <span class="history-status upcoming">⏱ Upcoming</span>
+        </div>
+      </div>
+
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <div class="history-img">
+          <img onerror="kashFallback(this)" src="https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=400&q=80" alt="Kashmir">
+        </div>
+        <div class="history-body">
+          <h3>Kashmir Dreams</h3>
+          <div class="meta"><span>📅 10 Days</span><span>👥 4 Travelers</span></div>
+          <span class="history-status draft">✎ Draft</span>
+        </div>
+      </div>
+
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <div class="history-img">
+          <img src="https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=400&q=80" alt="Swat">
+        </div>
+        <div class="history-body">
+          <h3>Weekend in Swat</h3>
+          <div class="meta"><span>📅 2 Days</span><span>👥 3 Travelers</span></div>
+          <span class="history-status completed">✓ Completed</span>
+        </div>
+      </div>
+
+      <div class="history-card" onclick="toast('Opening trip details…')">
+        <div class="history-img">
+          <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80" alt="Fairy Meadows">
+        </div>
+        <div class="history-body">
+          <h3>Fairy Meadows Camp</h3>
+          <div class="meta"><span>📅 14 Days</span><span>👥 5 Travelers</span></div>
+          <span class="history-status draft">✎ Draft</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="empty-state" style="margin-top:40px;">
+      <div class="empty-icon">✈️</div>
+      <h3>Ready for your next adventure?</h3>
+      <p>Start planning a new trip with NaviGo.</p>
+      <button class="btn-primary" onclick="showPage('plan')">Plan a New Trip</button>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO ANALYZER -->
+<section id="page-analyzer" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px; max-width: 900px;">
+    <div class="page-head">
+      <h1>Analyze a Road Photo</h1>
+      <p>Upload a road image and NaviGo will identify possible visible issues.</p>
+    </div>
+
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('photoInput').click()">
+      <div class="icon">📸</div>
+      <h3>Upload Road Photo</h3>
+      <p>Click or drag & drop (JPG, PNG)</p>
+      <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhoto(event)">
+    </div>
+
+    <div id="photoPreviewWrap" class="hidden" style="margin-top:20px;">
+      <img id="photoPreview" class="preview-img" alt="preview">
+      <div style="display:flex;gap:12px;">
+        <button class="btn-primary" onclick="analyzePhoto()">Analyze Photo</button>
+        <button class="btn-secondary" onclick="resetPhoto()">Reset</button>
+      </div>
+    </div>
+
+    <div id="analysisResult" class="hidden">
+      <div class="analysis-card">
+        <div class="warn">⚠️ Possible Issue Detected</div>
+        <h3>Road Obstruction</h3>
+        <p>Possible mud and standing water detected.</p>
+        <p style="margin-top:14px;">📍 Naran Road</p>
+        <button class="btn-primary" style="margin-top:20px;" onclick="toast('Report submitted — thank you!')">Submit Report</button>
+      </div>
+    </div>
+
+    <h2 style="font-weight:800;font-size:22px;margin-top:52px;margin-bottom:8px;">Community Road Reports</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:8px;">Live updates from travelers on the road.</p>
+    <div class="reports-grid">
+      <div class="report-card">
+        <div class="report-status"><span class="status-dot caution"></span> Caution</div>
+        <h4>Possible Road Obstruction</h4>
+        <p>📍 Naran Road</p>
+        <p style="margin-top:6px;">Reported recently</p>
+      </div>
+      <div class="report-card">
+        <div class="report-status"><span class="status-dot caution"></span> Caution</div>
+        <h4>Heavy Rain</h4>
+        <p>📍 Kaghan Road</p>
+        <p style="margin-top:6px;">Reported 25 min ago</p>
+      </div>
+      <div class="report-card">
+        <div class="report-status"><span class="status-dot open"></span> Open</div>
+        <h4>Road Clear</h4>
+        <p>📍 Babusar Top</p>
+        <p style="margin-top:6px;">Reported 1 hour ago</p>
+      </div>
+      <div class="report-card">
+        <div class="report-status"><span class="status-dot closed"></span> Closed</div>
+        <h4>Landslide</h4>
+        <p>📍 Jalkhad</p>
+        <p style="margin-top:6px;">Reported 2 hours ago</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESTINATION -->
+<section id="page-destination" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px;">
+    <div class="dest-hero" id="destHero">
+      <img id="destHeroImg" src="" alt="">
+      <div class="dest-hero-content">
+        <div class="popular-badge">⭐ Popular</div>
+        <h1 id="destHeroTitle">Naran</h1>
+        <p id="destHeroSub"></p>
+      </div>
+    </div>
+
+    <div class="dest-detail-grid">
+      <div>
+        <div class="detail-card">
+          <h2 id="destAboutTitle">About Naran</h2>
+          <p id="destAbout"></p>
+          <div class="meta-chips">
+            <span class="meta-chip" id="destTemp">🌡️ 18°C</span>
+            <span class="meta-chip" id="destCond">☁️ Partly Cloudy</span>
+            <span class="meta-chip green" id="destRoad">🟢 Road Open</span>
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <h2>Popular Places</h2>
+          <div class="popular-places" id="destPlaces"></div>
+        </div>
+
+        <div class="detail-card">
+          <h2>Nearby</h2>
+          <div class="popular-places">
+            <div class="place-box"><div class="emoji">🏨</div><strong>Hotels</strong></div>
+            <div class="place-box"><div class="emoji">🍽️</div><strong>Restaurants</strong></div>
+            <div class="place-box"><div class="emoji">⛽</div><strong>Fuel</strong></div>
+            <div class="place-box"><div class="emoji">🏥</div><strong>Hospitals</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="weather-card">
+          <div class="weather-top">
+            <div>
+              <small style="color:var(--muted);font-size:12px;font-weight:600;">Today</small>
+              <div class="weather-temp" id="wTemp">18°C</div>
+              <p style="color:var(--muted);font-size:14px;font-weight:500;" id="wCond">Partly Cloudy</p>
+            </div>
+            <div class="weather-icon">☁️</div>
+          </div>
+          <div class="weather-hl">
+            <div><small>High</small><strong id="wHigh">21°C</strong></div>
+            <div><small>Low</small><strong id="wLow">14°C</strong></div>
+          </div>
+        </div>
+
+        <div class="road-card">
+          <h3 style="font-size:17px;font-weight:800;margin-bottom:16px;">Travel Conditions</h3>
+          <div class="road-row">
+            <span class="status-dot open"></span>
+            <span>Road Open</span>
+          </div>
+          <div class="road-row">🚦 Moderate Traffic</div>
+          <div class="road-updated">Updated 10 minutes ago</div>
+        </div>
+
+        <button class="btn-primary" style="width:100%;justify-content:center;padding:15px;" onclick="showPage('plan')">✨ Plan My Trip</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section id="page-profile" class="page">
+  <div class="container" style="padding-top: 40px; padding-bottom: 40px; max-width: 900px;">
+    <div class="profile-head">
+      <div class="avatar">T</div>
+      <div>
+        <h1>Tayyab</h1>
+        <p>tayyab@navigo.app</p>
+      </div>
+    </div>
+
+    <div class="profile-menu">
+      <div class="menu-card" onclick="showPage('history')"><span>🧳 Travel History</span><span class="arrow">→</span></div>
+      <div class="menu-card" onclick="toast('Saved Destinations')"><span>⭐ Saved Destinations</span><span class="arrow">→</span></div>
+      <div class="menu-card" onclick="toast('My Reports')"><span>📝 My Reports</span><span class="arrow">→</span></div>
+      <div class="menu-card" onclick="toast('Settings')"><span>⚙️ Settings</span><span class="arrow">→</span></div>
+    </div>
+
+    <div class="empty-state">
+      <div class="empty-icon">✨</div>
+      <h3>No Saved Trips</h3>
+      <p>Your next adventure is waiting.</p>
+      <button class="btn-primary" onclick="showPage('plan')">Plan a Trip</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor"/>
+            </svg>
+          </div>
+          <span>Navi<span>Go</span></span>
+        </div>
+        <p>Explore More. Plan Smarter. Your smart travel companion for Pakistan.</p>
+        <div class="footer-social">
+          <a href="#" onclick="toast('Twitter'); return false;">𝕏</a>
+          <a href="#" onclick="toast('Instagram'); return false;">📷</a>
+          <a href="#" onclick="toast('Facebook'); return false;">f</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#" onclick="showPage('home'); return false;">Home</a></li>
+          <li><a href="#" onclick="showPage('explore'); return false;">Explore</a></li>
+          <li><a href="#" onclick="showPage('plan'); return false;">Plan Trip</a></li>
+          <li><a href="#" onclick="showPage('assistant'); return false;">AI Assistant</a></li>
+          <li><a href="#" onclick="showPage('history'); return false;">History</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#" onclick="toast('About'); return false;">About</a></li>
+          <li><a href="#" onclick="toast('Contact'); return false;">Contact</a></li>
+          <li><a href="#" onclick="showPage('profile'); return false;">Profile</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 NaviGo. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- Mobile bottom nav -->
+<nav class="mobile-bottom-nav">
+  <a href="#" class="active" data-page="home" onclick="showPage('home'); return false;"><span class="nav-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg></span><span class="nav-label">Home</span></a>
+  <a href="#" data-page="explore" onclick="showPage('explore'); return false;"><span class="nav-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><span class="nav-label">Explore</span></a>
+  <a href="#" data-page="plan" onclick="showPage('plan'); return false;"><span class="nav-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 16v4M17 18h4"/></svg></span><span class="nav-label">Plan</span></a>
+  <a href="#" data-page="assistant" onclick="showPage('assistant'); return false;"><span class="nav-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg></span><span class="nav-label">AI</span></a>
+  <a href="#" data-page="history" onclick="showPage('history'); return false;"><span class="nav-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg></span><span class="nav-label">History</span></a>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function kashFallback(img){
+  var steps = ['https://images.unsplash.com/photo-1614591276564-7b3e69347a48?auto=format&fit=crop&w=1200&q=80',
+               'https://commons.wikimedia.org/wiki/Special:FilePath/Kel_Valley_-_Neelum_Kashmir.jpg?width=1200',
+               "data:image/svg+xml;utf8,%3Csvg xmlns="];
+  var i = parseInt(img.getAttribute('data-fb') || '0', 10);
+  if (i >= steps.length) { img.onerror = null; return; }
+  img.setAttribute('data-fb', i + 1);
+  img.src = steps[i];
+}
+/* SPLASH */
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    document.getElementById('splash').classList.add('hide');
+  }, 2000);
+});
+
+/* MOCK DATA */
+var destinations = {
+  naran: {
+    name: "Naran",
+    sub: "Alpine valley with lakes, rivers, and the Babusar Top gateway.",
+    about: "A beautiful town in Kaghan Valley famous for Saif-ul-Malook Lake and the road to Babusar Top. Best time to visit is May to September.",
+    img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=80",
+    weather: { temp: 18, cond: "Partly Cloudy", high: 21, low: 14 },
+    places: ["Saif-ul-Malook", "Lulusar Lake", "Babusar Top"]
+  },
+  hunza: {
+    name: "Hunza",
+    sub: "Land of forts, apricot blossoms, and dramatic mountain peaks.",
+    about: "A jewel of Gilgit-Baltistan known for Baltit Fort, Attabad Lake, and unforgettable hospitality. Visit in spring for cherry blossoms.",
+    img: "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=1600&q=80",
+    weather: { temp: 12, cond: "Sunny", high: 16, low: 6 },
+    places: ["Baltit Fort", "Attabad Lake", "Passu Cones"]
+  },
+  skardu: {
+    name: "Skardu",
+    sub: "Gateway to the Karakoram — lakes, deserts, and glaciers.",
+    about: "Gateway to K2 with Shangrila Resort, Upper Kachura Lake, and the Cold Desert. A paradise for trekkers and photographers.",
+    img: "https://images.unsplash.com/photo-1509316785289-025f5b846b35?auto=format&fit=crop&w=1600&q=80",
+    weather: { temp: 14, cond: "Clear", high: 18, low: 7 },
+    places: ["Shangrila Resort", "Upper Kachura Lake", "Cold Desert"]
+  },
+  swat: {
+    name: "Swat",
+    sub: "The Switzerland of Pakistan — rivers and pine forests.",
+    about: "Lush meadows, Swat River, Malam Jabba ski resort, and rich Buddhist history. A perfect weekend getaway.",
+    img: "https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1600&q=80",
+    weather: { temp: 20, cond: "Sunny", high: 24, low: 13 },
+    places: ["Malam Jabba", "Kalam Valley", "Fizagat"]
+  },
+  murree: {
+    name: "Murree",
+    sub: "Classic hill station — pine trees, cool air, and Mall Road.",
+    about: "Pakistan's most famous hill station, only a short drive from Islamabad. Great for quick weekend trips.",
+    img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1600&q=80",
+    weather: { temp: 15, cond: "Cloudy", high: 19, low: 11 },
+    places: ["Mall Road", "Patriata", "Pindi Point"]
+  },
+  kashmir: {
+    name: "Kashmir",
+    sub: "Heaven on earth — Dal Lake, houseboats, and lush valleys.",
+    about: "Azad Kashmir offers stunning valleys, rivers, and meadows. From Neelum Valley to Rawalakot, every corner is a postcard.",
+    img: "https://images.unsplash.com/photo-1595815771614-ade9d652a65d?auto=format&fit=crop&w=1600&q=80",
+    weather: { temp: 16, cond: "Partly Cloudy", high: 20, low: 11 },
+    places: ["Neelum Valley", "Rawalakot", "Banjosa Lake"]
+  },
+  gilgit: {
+    name: "Gilgit",
+    sub: "Gateway to the northern valleys, rivers, and rugged peaks.",
+    about: "Gilgit is the administrative hub of Gilgit-Baltistan and the entry point to Hunza, Skardu, and Ghizer. Surrounded by dramatic mountains.",
+    img: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80",
+    weather: { temp: 13, cond: "Clear", high: 17, low: 5 },
+    places: ["Gilgit River", "Kargah Buddha", "Naltar Valley"]
+  },
+  fairy: {
+    name: "Fairy Meadows",
+    sub: "Green pastures at the foot of Nanga Parbat — cheapest escape.",
+    about: "Fairy Meadows is a grassy plateau offering the closest view of Nanga Parbat, the 9th highest mountain in the world. Perfect for camping.",
+    img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=80",
+    weather: { temp: 10, cond: "Sunny", high: 14, low: 3 },
+    places: ["Nanga Parbat View", "Camping Ground", "Raikot Bridge"]
+  }
+};
+
+var mapPlaces = [
+  { id: 1, type: "attraction", icon: "🏔️", name: "Saif-ul-Malook Lake", location: "Naran", x: 32, y: 38, description: "Legendary alpine lake." },
+  { id: 2, type: "attraction", icon: "🏔️", name: "Lulusar Lake", location: "Naran", x: 58, y: 28, description: "Scenic lake en route Babusar." },
+  { id: 3, type: "hotel", icon: "🏨", name: "Pine Park Hotel", location: "Naran", x: 44, y: 55, description: "Comfortable stay in Naran." },
+  { id: 4, type: "restaurant", icon: "🍽️", name: "Trout Restaurant", location: "Naran", x: 66, y: 62, description: "Local trout & Pakistani cuisine." },
+  { id: 5, type: "fuel", icon: "⛽", name: "PSO Naran", location: "Naran", x: 22, y: 70, description: "Fuel on main Naran Road." },
+  { id: 6, type: "hospital", icon: "🏥", name: "THQ Hospital Naran", location: "Naran", x: 74, y: 44, description: "24/7 medical facility." },
+  { id: 7, type: "attraction", icon: "🏔️", name: "Babusar Top", location: "Naran", x: 78, y: 22, description: "Panoramic mountain pass." }
+];
+
+/* NAVIGATION */
+function showPage(name) {
+  var pages = document.querySelectorAll('.page');
+  for (var i = 0; i < pages.length; i++) pages[i].classList.remove('active');
+  var page = document.getElementById('page-' + name);
+  if (page) page.classList.add('active');
+
+  var navLinks = document.querySelectorAll('.nav-link');
+  for (var j = 0; j < navLinks.length; j++) {
+    navLinks[j].classList.toggle('active', navLinks[j].getAttribute('data-page') === name);
+  }
+  var mobLinks = document.querySelectorAll('.mobile-bottom-nav a');
+  for (var k = 0; k < mobLinks.length; k++) {
+    mobLinks[k].classList.toggle('active', mobLinks[k].getAttribute('data-page') === name);
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (name === 'explore') renderExplore();
+}
+
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('mobile-open');
+}
+
+function closeMobileMenu() {
+  document.getElementById('navLinks').classList.remove('mobile-open');
+}
+
+/* DESTINATION */
+function showDestination(id) {
+  var d = destinations[id];
+  if (!d) return;
+
+  var _h = document.getElementById('destHeroImg'); _h.removeAttribute('data-fb'); _h.onerror = function(){ kashFallback(_h); }; _h.src = d.img;
+  document.getElementById('destHeroTitle').textContent = d.name;
+  document.getElementById('destHeroSub').textContent = d.sub;
+  document.getElementById('destAboutTitle').textContent = 'About ' + d.name;
+  document.getElementById('destAbout').textContent = d.about;
+  document.getElementById('destTemp').textContent = '🌡️ ' + d.weather.temp + '°C';
+  document.getElementById('destCond').textContent = '☁️ ' + d.weather.cond;
+  document.getElementById('wTemp').textContent = d.weather.temp + '°C';
+  document.getElementById('wCond').textContent = d.weather.cond;
+  document.getElementById('wHigh').textContent = d.weather.high + '°C';
+  document.getElementById('wLow').textContent = d.weather.low + '°C';
+
+  var placesHTML = '';
+  for (var i = 0; i < d.places.length; i++) {
+    placesHTML += '<div class="place-box"><div class="emoji">🏔️</div><strong>' + d.places[i] + '</strong></div>';
+  }
+  document.getElementById('destPlaces').innerHTML = placesHTML;
+
+  showPage('destination');
+}
+
+/* EXPLORE */
+var currentCat = 'all';
+var currentQuery = '';
+var activePinId = null;
+
+function setCategory(el) {
+  var chips = document.querySelectorAll('#categoryChips .chip');
+  for (var i = 0; i < chips.length; i++) chips[i].classList.remove('active');
+  el.classList.add('active');
+  currentCat = el.getAttribute('data-cat');
+  renderExplore();
+}
+
+function filterPlaces() {
+  currentQuery = document.getElementById('searchInput').value.toLowerCase();
+  renderExplore();
+}
+
+function renderExplore() {
+  var map = document.getElementById('mapArea');
+  var list = document.getElementById('placesList');
+  if (!map || !list) return;
+
+  var filtered = [];
+  for (var i = 0; i < mapPlaces.length; i++) {
+    var p = mapPlaces[i];
+    var matchCat = currentCat === 'all' || p.type === currentCat;
+    var matchQ = !currentQuery || p.name.toLowerCase().indexOf(currentQuery) !== -1 || p.location.toLowerCase().indexOf(currentQuery) !== -1;
+    if (matchCat && matchQ) filtered.push(p);
+  }
+
+  var oldPins = map.querySelectorAll('.map-pin');
+  for (var j = 0; j < oldPins.length; j++) oldPins[j].remove();
+
+  for (var k = 0; k < filtered.length; k++) {
+    var pp = filtered[k];
+    var btn = document.createElement('button');
+    btn.className = 'map-pin' + (activePinId === pp.id ? ' active' : '');
+    btn.style.left = pp.x + '%';
+    btn.style.top = pp.y + '%';
+    btn.setAttribute('data-id', pp.id);
+    btn.onclick = (function(id) { return function() { selectPin(id); }; })(pp.id);
+    btn.innerHTML = '<div class="pin-bubble">' + pp.icon + ' ' + pp.name + '</div>';
+    map.appendChild(btn);
+  }
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="place-item"><p style="color:var(--muted)">No places match your search.</p></div>';
+    return;
+  }
+
+  var listHTML = '';
+  for (var m = 0; m < filtered.length; m++) {
+    var fp = filtered[m];
+    listHTML += '<div class="place-item ' + (activePinId === fp.id ? 'active' : '') + '" onclick="selectPin(' + fp.id + ')">' +
+      '<div class="place-icon">' + fp.icon + '</div>' +
+      '<div><h4>' + fp.name + '</h4>' +
+      '<div class="loc">📍 ' + fp.location + '</div>' +
+      '<p>' + fp.description + '</p></div></div>';
+  }
+  list.innerHTML = listHTML;
+}
+
+function selectPin(id) {
+  activePinId = id;
+  renderExplore();
+}
+
+/* PLAN TRIP */
+function generateTrip() {
+  document.getElementById('planForm').classList.add('hidden');
+  document.getElementById('planResult').classList.add('hidden');
+  document.getElementById('planLoading').classList.remove('hidden');
+
+  var steps = document.querySelectorAll('.loading-step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.remove('done');
+    steps[i].querySelector('.step-check').textContent = (i + 1);
+  }
+
+  var idx = 0;
+  function tick() {
+    if (idx < steps.length) {
+      steps[idx].classList.add('done');
+      steps[idx].querySelector('.step-check').textContent = '✓';
+      idx++;
+      setTimeout(tick, 650);
+    } else {
+      setTimeout(function() {
+        document.getElementById('planLoading').classList.add('hidden');
+        document.getElementById('planResult').classList.remove('hidden');
+        var dur = document.getElementById('planDuration').value;
+        var trv = document.getElementById('planTravelers').value;
+        document.getElementById('resultMeta').textContent = dur + ' • ' + trv + ' Travelers';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 500);
+    }
+  }
+  tick();
+}
+
+function backToForm() {
+  document.getElementById('planResult').classList.add('hidden');
+  document.getElementById('planForm').classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* AI ASSISTANT */
+var mockReplies = {
+  default: "Based on your trip, try Saif-ul-Malook in the morning, then Lulusar Lake and Babusar Top if weather permits.",
+  best: "Top picks: Saif-ul-Malook Lake, Lulusar Lake, and Babusar Top. Start early to avoid traffic.",
+  budget: "Budget options: local guest houses in Naran Bazaar, street food near main road, shared jeeps to Saif-ul-Malook.",
+  tomorrow: "Tomorrow: Saif-ul-Malook (8 AM), lunch in Naran Bazaar, Lulusar Lake (3 PM), back by 7 PM.",
+  weather: "Naran tomorrow: ~18°C, partly cloudy. Carry a light jacket."
+};
+
+function askAI(text) {
+  document.getElementById('chatInput').value = text;
+  sendMessage();
+}
+
+function sendMessage() {
+  var input = document.getElementById('chatInput');
+  var text = input.value.trim();
+  if (!text) return;
+
+  var messages = document.getElementById('chatMessages');
+  messages.insertAdjacentHTML('beforeend', '<div class="msg user"><div class="msg-bubble">' + escapeHtml(text) + '</div></div>');
+  input.value = '';
+  messages.scrollTop = messages.scrollHeight;
+
+  var typingId = 'typing-' + Date.now();
+  messages.insertAdjacentHTML('beforeend', '<div class="msg ai" id="' + typingId + '"><div class="msg-bubble" style="color:var(--muted)">NaviGo is typing…</div></div>');
+  messages.scrollTop = messages.scrollHeight;
+
+  setTimeout(function() {
+    var lower = text.toLowerCase();
+    var reply = mockReplies.default;
+    if (lower.indexOf('best') !== -1) reply = mockReplies.best;
+    else if (lower.indexOf('budget') !== -1) reply = mockReplies.budget;
+    else if (lower.indexOf('tomorrow') !== -1) reply = mockReplies.tomorrow;
+    else if (lower.indexOf('weather') !== -1) reply = mockReplies.weather;
+
+    var typingEl = document.getElementById(typingId);
+    if (typingEl) typingEl.remove();
+
+    messages.insertAdjacentHTML('beforeend', '<div class="msg ai"><div class="msg-bubble">' + reply + '</div></div>');
+    messages.scrollTop = messages.scrollHeight;
+  }, 800);
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, function(c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+/* PHOTO ANALYZER */
+function handlePhoto(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    document.getElementById('photoPreview').src = ev.target.result;
+    document.getElementById('uploadZone').classList.add('hidden');
+    document.getElementById('photoPreviewWrap').classList.remove('hidden');
+    document.getElementById('analysisResult').classList.add('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+
+function analyzePhoto() {
+  setTimeout(function() {
+    document.getElementById('analysisResult').classList.remove('hidden');
+    window.scrollTo({ top: document.getElementById('analysisResult').offsetTop - 80, behavior: 'smooth' });
+  }, 400);
+}
+
+function resetPhoto() {
+  document.getElementById('photoInput').value = '';
+  document.getElementById('photoPreviewWrap').classList.add('hidden');
+  document.getElementById('analysisResult').classList.add('hidden');
+  document.getElementById('uploadZone').classList.remove('hidden');
+}
+
+/* TOAST */
+var toastTimer;
+function toast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2200);
+}
+
+/* INIT */
+document.addEventListener('DOMContentLoaded', function() {
+  renderExplore();
+});
+</script>
+
+</body>
+</html>
